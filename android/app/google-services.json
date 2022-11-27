@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "479756170364",
+    "project_id": "kaloriku-26318",
+    "storage_bucket": "kaloriku-26318.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479756170364:android:0ec320be064db5f0bbc5f9",
+        "android_client_info": {
+          "package_name": "com.example.kalori"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479756170364-vrqii2hdnlfl1co4ck2dqrsltbhia965.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kalori",
+            "certificate_hash": "dca8eb9a5a460c692f2c45cd3cb08ee099c75074"
+          }
+        },
+        {
+          "client_id": "479756170364-pupu04raotu5h0r7cu9m1q5ovu4afkcg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ4ge-TQ1VCh814xBVmFRyhMNZOzi8KBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "479756170364-pupu04raotu5h0r7cu9m1q5ovu4afkcg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "479756170364-0k3vdk57ajtrm0lnhk6krfmcuea3eb2a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kalorikuV2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479756170364:android:b7f796cd6377535abbc5f9",
+        "android_client_info": {
+          "package_name": "com.example.kaloriku_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479756170364-5k8t1pi56kvooha30p8p2g9pfqrum977.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kaloriku_v2",
+            "certificate_hash": "dca8eb9a5a460c692f2c45cd3cb08ee099c75074"
+          }
+        },
+        {
+          "client_id": "479756170364-pupu04raotu5h0r7cu9m1q5ovu4afkcg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ4ge-TQ1VCh814xBVmFRyhMNZOzi8KBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "479756170364-pupu04raotu5h0r7cu9m1q5ovu4afkcg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "479756170364-0k3vdk57ajtrm0lnhk6krfmcuea3eb2a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kalorikuV2"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
