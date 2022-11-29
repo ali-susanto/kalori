@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kalori/screen/auth/login_screen.dart';
 import 'package:kalori/screen/tips/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
@@ -34,6 +35,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Kalori',
       theme: ThemeData(
+        textTheme: GoogleFonts.nunitoTextTheme(
+          Theme.of(context).textTheme,
+        ),
         primarySwatch: Colors.blue,
       ),
       routes: {
