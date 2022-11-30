@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(width: 15),
                         const Text(
-                          "Sign In with Google",
+                          "Sign In dengan Google",
                           style: TextStyle(fontSize: 20),
                         ),
                       ],
