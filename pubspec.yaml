@@ -55,6 +55,7 @@ dependencies:
   fluttertoast: ^8.1.1
   loading_animation_widget: ^1.2.0+3
   google_fonts: ^3.0.1
+  sleek_circular_slider: ^2.0.1
   
 
 dev_dependencies:
