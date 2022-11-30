@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 const kPrimaryColor = Color(0xFF6F35A5);
@@ -12,3 +14,7 @@ const kPrimaryGreen = Color(0xFF24444b);
 const kSecondaryGreen = Color(0xFF769152);
 
 const double defaultPadding = 16.0;
+
+const TextStyle txtGeneralBoldWhite =
+    TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold);
+const TextStyle txtLabelCircularSlider = TextStyle(color: Colors.white);
