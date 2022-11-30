@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:tflite/tflite.dart';
@@ -15,17 +17,22 @@ class _DetectionScreenState extends State<DetectionScreen> {
   CameraController? cameraController;
   CameraImage? cameraImage;
   List? recognitionsList;
+  XFile image = XFile('');
 
-  initCamera() {
-    cameraController = CameraController(cameras[0], ResolutionPreset.medium);
-    cameraController!.initialize().then((value) {
-      setState(() {
-        cameraController!.startImageStream((image) => {
-              cameraImage = image,
-              runModel(),
-            });
+  initCamera() async {
+    if (cameras.isEmpty != null) {
+      cameraController = CameraController(cameras[0], ResolutionPreset.max);
+      //cameras[0] = first camera, change to 1 to another camera
+
+      cameraController!.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
       });
-    });
+    } else {
+      print("NO any camera found");
+    }
   }
 
   runModel() async {
@@ -67,8 +74,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
   void initState() {
     super.initState();
 
-    loadModel();
     initCamera();
+    // loadModel();
   }
 
   List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
@@ -130,14 +137,86 @@ class _DetectionScreenState extends State<DetectionScreen> {
       list.addAll(displayBoxesAroundRecognizedObjects(size));
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Container(
-          margin: EdgeInsets.only(top: 50),
-          color: Colors.black,
-          child: Stack(
-            children: list,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          'Deteksi Makanan',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Container(
+                height: size.height * 0.7,
+                width: size.width,
+                // margin: EdgeInsets.only(top: 50),
+                color: Colors.transparent,
+                child: image.path.isEmpty
+                    ? (!cameraController!.value.isInitialized)
+                        ? new Container()
+                        : AspectRatio(
+                            aspectRatio: cameraController!.value.aspectRatio,
+                            child: CameraPreview(cameraController!),
+                          )
+                    : Image.file(File(image.path)),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: image.path.isEmpty
+                    ? () async {
+                        try {
+                          if (cameraController != null) {
+                            //check if contrller is not null
+                            if (cameraController!.value.isInitialized) {
+                              //check if cameraController is initialized
+                              image = await cameraController!
+                                  .takePicture(); //capture image
+                              setState(() {
+                                //update UI
+                              });
+                            }
+                          }
+                        } catch (e) {
+                          print(e); //show error
+                        }
+                        // print(image!.path.toString());
+                      }
+                    : () {
+                        setState(() {
+                          imageCache!.clear();
+
+                          image = XFile('');
+                          print(image.path.toString());
+                        });
+                      },
+                child: CircleAvatar(
+                  radius: size.height * 0.04,
+                  child: image.path.isEmpty
+                      ? CircleAvatar(
+                          radius: size.height * 0.036,
+                          backgroundColor: Colors.grey)
+                      : CircleAvatar(
+                          radius: size.height * 0.036,
+                          // backgroundColor: Colors.grey,
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.redAccent,
+                            size: 50,
+                          ),
+                        ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
