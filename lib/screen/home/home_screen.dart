@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kalori/constants.dart';
+import 'package:kalori/screen/detection/camera_detection_screen.dart';
 import 'package:kalori/service/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
@@ -182,7 +183,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   ],
                 ),
-              )
+              ),
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const CameraDetectionScreen()));
+                  },
+                  icon: Icon(Icons.camera)),
             ],
           ),
         ),

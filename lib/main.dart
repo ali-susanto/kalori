@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalori/screen/auth/login_screen.dart';
+import 'package:kalori/screen/detection/camera_detection_screen.dart';
 import 'package:kalori/screen/tips/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,11 @@ late List<CameraDescription> cameras;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  cameras = await availableCameras();
+  try {
+    cameras = await availableCameras();
+  } on CameraException catch (e) {
+    debugPrint('Gagal mendeteksi camera');
+  }
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => TipsViewModel()),
     ChangeNotifierProvider(create: (_) => AuthService()),
@@ -61,7 +66,7 @@ class _MainBodyState extends State<MainBody> {
   final _page = const [
     HomeScreen(),
     CalculatorScreen(),
-    DetectionScreen(),
+    CameraDetectionScreen(),
     TipsScreen(),
     ProfileScreen()
   ];
