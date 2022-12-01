@@ -3,11 +3,10 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:kalori/screen/home/home_screen.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:video_player/video_player.dart';
+// import 'package:video_player/video_player.dart';
 
 import '../../main.dart';
 
@@ -21,28 +20,19 @@ class CameraDetectionScreen extends StatefulWidget {
 class _CameraDetectionScreenState extends State<CameraDetectionScreen>
     with WidgetsBindingObserver {
   CameraController? controller;
-  VideoPlayerController? videoController;
+  File _imageFile = File('');
 
-  File? _imageFile;
-  File? _videoFile;
-
-  // Initial values
   bool _isCameraInitialized = false;
   bool _isCameraPermissionGranted = false;
   bool _isRearCameraSelected = true;
-  bool _isVideoCameraSelected = false;
-  bool _isRecordingInProgress = false;
   double _minAvailableExposureOffset = 0.0;
   double _maxAvailableExposureOffset = 0.0;
   double _minAvailableZoom = 1.0;
   double _maxAvailableZoom = 1.0;
 
-  // Current values
   double _currentZoomLevel = 1.0;
   double _currentExposureOffset = 0.0;
   FlashMode? _currentFlashMode;
-
-  List<File> allFileList = [];
 
   final resolutionPresets = ResolutionPreset.values;
 
@@ -57,43 +47,9 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
       setState(() {
         _isCameraPermissionGranted = true;
       });
-      // Set and initialize the new camera
       onNewCameraSelected(cameras[0]);
-      refreshAlreadyCapturedImages();
     } else {
       log('Camera Permission: DENIED');
-    }
-  }
-
-  refreshAlreadyCapturedImages() async {
-    final directory = await getApplicationDocumentsDirectory();
-    List<FileSystemEntity> fileList = await directory.list().toList();
-    allFileList.clear();
-    List<Map<int, dynamic>> fileNames = [];
-
-    fileList.forEach((file) {
-      if (file.path.contains('.jpg') || file.path.contains('.mp4')) {
-        allFileList.add(File(file.path));
-
-        String name = file.path.split('/').last.split('.').first;
-        fileNames.add({0: int.parse(name), 1: file.path.split('/').last});
-      }
-    });
-
-    if (fileNames.isNotEmpty) {
-      final recentFile =
-          fileNames.reduce((curr, next) => curr[0] > next[0] ? curr : next);
-      String recentFileName = recentFile[1];
-      if (recentFileName.contains('.mp4')) {
-        _videoFile = File('${directory.path}/$recentFileName');
-        _imageFile = null;
-        _startVideoPlayer();
-      } else {
-        _imageFile = File('${directory.path}/$recentFileName');
-        _videoFile = null;
-      }
-
-      setState(() {});
     }
   }
 
@@ -101,7 +57,6 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
     final CameraController? cameraController = controller;
 
     if (cameraController!.value.isTakingPicture) {
-      // A capture is already pending, do nothing.
       return null;
     }
 
@@ -111,82 +66,6 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
     } on CameraException catch (e) {
       print('Error occured while taking picture: $e');
       return null;
-    }
-  }
-
-  Future<void> _startVideoPlayer() async {
-    if (_videoFile != null) {
-      videoController = VideoPlayerController.file(_videoFile!);
-      await videoController!.initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized,
-        // even before the play button has been pressed.
-        setState(() {});
-      });
-      await videoController!.setLooping(true);
-      await videoController!.play();
-    }
-  }
-
-  Future<void> startVideoRecording() async {
-    final CameraController? cameraController = controller;
-
-    if (controller!.value.isRecordingVideo) {
-      // A recording has already started, do nothing.
-      return;
-    }
-
-    try {
-      await cameraController!.startVideoRecording();
-      setState(() {
-        _isRecordingInProgress = true;
-        print(_isRecordingInProgress);
-      });
-    } on CameraException catch (e) {
-      print('Error starting to record video: $e');
-    }
-  }
-
-  Future<XFile?> stopVideoRecording() async {
-    if (!controller!.value.isRecordingVideo) {
-      // Recording is already is stopped state
-      return null;
-    }
-
-    try {
-      XFile file = await controller!.stopVideoRecording();
-      setState(() {
-        _isRecordingInProgress = false;
-      });
-      return file;
-    } on CameraException catch (e) {
-      print('Error stopping video recording: $e');
-      return null;
-    }
-  }
-
-  Future<void> pauseVideoRecording() async {
-    if (!controller!.value.isRecordingVideo) {
-      // Video recording is not in progress
-      return;
-    }
-
-    try {
-      await controller!.pauseVideoRecording();
-    } on CameraException catch (e) {
-      print('Error pausing video recording: $e');
-    }
-  }
-
-  Future<void> resumeVideoRecording() async {
-    if (!controller!.value.isRecordingVideo) {
-      // No video recording was in progress
-      return;
-    }
-
-    try {
-      await controller!.resumeVideoRecording();
-    } on CameraException catch (e) {
-      print('Error resuming video recording: $e');
     }
   }
 
@@ -214,7 +93,6 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
       });
     }
 
-    // Update UI if controller updated
     cameraController.addListener(() {
       if (mounted) setState(() {});
     });
@@ -263,8 +141,6 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
 
   @override
   void initState() {
-    // Hide the status bar in Android
-    // SystemChrome.setEnabledSystemUIOverlays([]);
     getPermissionStatus();
     super.initState();
   }
@@ -272,8 +148,6 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final CameraController? cameraController = controller;
-
-    // App state changed before we got the chance to initialize.
     if (cameraController == null || !cameraController.value.isInitialized) {
       return;
     }
@@ -288,12 +162,13 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
   @override
   void dispose() {
     controller?.dispose();
-    videoController?.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -317,223 +192,158 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
       backgroundColor: Colors.black,
       body: _isCameraPermissionGranted
           ? _isCameraInitialized
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          physics: BouncingScrollPhysics(),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                InkWell(
-                                  onTap: () async {
-                                    setState(() {
-                                      _currentFlashMode = FlashMode.off;
-                                    });
-                                    await controller!.setFlashMode(
-                                      FlashMode.off,
-                                    );
-                                  },
-                                  child: Icon(
-                                    Icons.flash_off,
-                                    color: _currentFlashMode == FlashMode.off
-                                        ? Colors.amber
-                                        : Colors.white,
-                                  ),
+              ? _imageFile.path.isNotEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Image.file(
+                              _imageFile,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              setState(() {
+                                _imageFile = File('');
+                              });
+                            },
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.circle,
+                                  color: Colors.white,
+                                  size: 80,
                                 ),
-                                InkWell(
-                                  onTap: () async {
-                                    setState(() {
-                                      _currentFlashMode = FlashMode.auto;
-                                    });
-                                    await controller!.setFlashMode(
-                                      FlashMode.auto,
-                                    );
-                                  },
-                                  child: Icon(
-                                    Icons.flash_auto,
-                                    color: _currentFlashMode == FlashMode.auto
-                                        ? Colors.amber
-                                        : Colors.white,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    setState(() {
-                                      _currentFlashMode = FlashMode.always;
-                                    });
-                                    await controller!.setFlashMode(
-                                      FlashMode.always,
-                                    );
-                                  },
-                                  child: Icon(
-                                    Icons.flash_on,
-                                    color: _currentFlashMode == FlashMode.always
-                                        ? Colors.amber
-                                        : Colors.white,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    setState(() {
-                                      _currentFlashMode = FlashMode.torch;
-                                    });
-                                    await controller!.setFlashMode(
-                                      FlashMode.torch,
-                                    );
-                                  },
-                                  child: Icon(
-                                    Icons.highlight,
-                                    color: _currentFlashMode == FlashMode.torch
-                                        ? Colors.amber
-                                        : Colors.white,
-                                  ),
+                                Icon(
+                                  Icons.cancel,
+                                  color: Colors.red,
+                                  size: 65,
                                 ),
                               ],
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                      AspectRatio(
-                        aspectRatio: 1 / controller!.value.aspectRatio,
-                        child: Stack(
-                          children: [
-                            CameraPreview(
-                              controller!,
-                              child: LayoutBuilder(builder:
-                                  (BuildContext context,
-                                      BoxConstraints constraints) {
-                                return GestureDetector(
-                                  behavior: HitTestBehavior.opaque,
-                                  onTapDown: (details) =>
-                                      onViewFinderTap(details, constraints),
-                                );
-                              }),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                16.0,
-                                8.0,
-                                16.0,
-                                8.0,
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                          _currentFlashMode = FlashMode.off;
+                                        });
+                                        await controller!.setFlashMode(
+                                          FlashMode.off,
+                                        );
+                                      },
+                                      child: Icon(
+                                        Icons.flash_off,
+                                        color:
+                                            _currentFlashMode == FlashMode.off
+                                                ? Colors.amber
+                                                : Colors.white,
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                          _currentFlashMode = FlashMode.auto;
+                                        });
+                                        await controller!.setFlashMode(
+                                          FlashMode.auto,
+                                        );
+                                      },
+                                      child: Icon(
+                                        Icons.flash_auto,
+                                        color:
+                                            _currentFlashMode == FlashMode.auto
+                                                ? Colors.amber
+                                                : Colors.white,
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                          _currentFlashMode = FlashMode.always;
+                                        });
+                                        await controller!.setFlashMode(
+                                          FlashMode.always,
+                                        );
+                                      },
+                                      child: Icon(
+                                        Icons.flash_on,
+                                        color: _currentFlashMode ==
+                                                FlashMode.always
+                                            ? Colors.amber
+                                            : Colors.white,
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                          _currentFlashMode = FlashMode.torch;
+                                        });
+                                        await controller!.setFlashMode(
+                                          FlashMode.torch,
+                                        );
+                                      },
+                                      child: Icon(
+                                        Icons.highlight,
+                                        color:
+                                            _currentFlashMode == FlashMode.torch
+                                                ? Colors.amber
+                                                : Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.black87,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 8.0,
-                                          right: 8.0,
-                                        ),
-                                        child: DropdownButton<ResolutionPreset>(
-                                          dropdownColor: Colors.black87,
-                                          underline: Container(),
-                                          value: currentResolutionPreset,
-                                          items: [
-                                            for (ResolutionPreset preset
-                                                in resolutionPresets)
-                                              DropdownMenuItem(
-                                                child: Text(
-                                                  preset
-                                                      .toString()
-                                                      .split('.')[1]
-                                                      .toUpperCase(),
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                value: preset,
-                                              )
-                                          ],
-                                          onChanged: (value) {
-                                            setState(() {
-                                              currentResolutionPreset = value!;
-                                              _isCameraInitialized = false;
-                                            });
-                                            onNewCameraSelected(
-                                                controller!.description);
-                                          },
-                                          hint: Text("Select item"),
-                                        ),
-                                      ),
-                                    ),
+                            ),
+                          ),
+                          AspectRatio(
+                            aspectRatio: 1 / controller!.value.aspectRatio,
+                            child: Stack(
+                              children: [
+                                CameraPreview(
+                                  controller!,
+                                  child: LayoutBuilder(builder:
+                                      (BuildContext context,
+                                          BoxConstraints constraints) {
+                                    return GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTapDown: (details) =>
+                                          onViewFinderTap(details, constraints),
+                                    );
+                                  }),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0,
+                                    vertical: 8.0,
                                   ),
-                                  // Spacer(),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 8.0, top: 16.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          _currentExposureOffset
-                                                  .toStringAsFixed(1) +
-                                              'x',
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: RotatedBox(
-                                      quarterTurns: 3,
-                                      child: Container(
-                                        height: 30,
-                                        child: Slider(
-                                          value: _currentExposureOffset,
-                                          min: _minAvailableExposureOffset,
-                                          max: _maxAvailableExposureOffset,
-                                          activeColor: Colors.white,
-                                          inactiveColor: Colors.white30,
-                                          onChanged: (value) async {
-                                            setState(() {
-                                              _currentExposureOffset = value;
-                                            });
-                                            await controller!
-                                                .setExposureOffset(value);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Expanded(
-                                        child: Slider(
-                                          value: _currentZoomLevel,
-                                          min: _minAvailableZoom,
-                                          max: _maxAvailableZoom,
-                                          activeColor: Colors.white,
-                                          inactiveColor: Colors.white30,
-                                          onChanged: (value) async {
-                                            setState(() {
-                                              _currentZoomLevel = value;
-                                            });
-                                            await controller!
-                                                .setZoomLevel(value);
-                                          },
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8.0),
+                                      Align(
+                                        alignment: Alignment.topRight,
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: Colors.black87,
@@ -541,169 +351,233 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                                 BorderRadius.circular(10.0),
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              _currentZoomLevel
-                                                      .toStringAsFixed(1) +
-                                                  'x',
-                                              style: TextStyle(
-                                                  color: Colors.white),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0,
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: _isRecordingInProgress
-                                            ? () async {
-                                                if (controller!
-                                                    .value.isRecordingPaused) {
-                                                  await resumeVideoRecording();
-                                                } else {
-                                                  await pauseVideoRecording();
-                                                }
-                                              }
-                                            : () {
+                                            child: DropdownButton<
+                                                ResolutionPreset>(
+                                              dropdownColor: Colors.black87,
+                                              underline: Container(),
+                                              value: currentResolutionPreset,
+                                              items: [
+                                                for (ResolutionPreset preset
+                                                    in resolutionPresets)
+                                                  DropdownMenuItem(
+                                                    child: Text(
+                                                      preset
+                                                          .toString()
+                                                          .split('.')[1]
+                                                          .toUpperCase(),
+                                                      style: const TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                    value: preset,
+                                                  )
+                                              ],
+                                              onChanged: (value) {
                                                 setState(() {
+                                                  currentResolutionPreset =
+                                                      value!;
                                                   _isCameraInitialized = false;
                                                 });
-                                                onNewCameraSelected(cameras[
-                                                    _isRearCameraSelected
-                                                        ? 1
-                                                        : 0]);
-                                                setState(() {
-                                                  _isRearCameraSelected =
-                                                      !_isRearCameraSelected;
-                                                });
+                                                onNewCameraSelected(
+                                                    controller!.description);
                                               },
-                                        child: Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.circle,
-                                              color: Colors.black38,
-                                              size: 60,
+                                              hint: const Text("Select item"),
                                             ),
-                                            Icon(
-                                              _isRearCameraSelected
-                                                  ? Icons.camera_front
-                                                  : Icons.camera_rear,
-                                              color: Colors.white,
-                                              size: 30,
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                       ),
-                                      InkWell(
-                                        onTap: () async {
-                                          XFile? rawImage = await takePicture();
-                                          File imageFile = File(rawImage!.path);
-
-                                          int currentUnix = DateTime.now()
-                                              .millisecondsSinceEpoch;
-
-                                          final directory =
-                                              await getApplicationDocumentsDirectory();
-
-                                          String fileFormat =
-                                              imageFile.path.split('.').last;
-
-                                          print(fileFormat);
-
-                                          await imageFile.copy(
-                                            '${directory.path}/$currentUnix.$fileFormat',
-                                          );
-
-                                          refreshAlreadyCapturedImages();
-                                        },
-                                        child: Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.circle,
-                                              color: _isVideoCameraSelected
-                                                  ? Colors.white
-                                                  : Colors.white38,
-                                              size: 80,
-                                            ),
-                                            Icon(
-                                              Icons.circle,
-                                              color: _isVideoCameraSelected
-                                                  ? Colors.red
-                                                  : Colors.white,
-                                              size: 65,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: _imageFile != null
-                                            ? () {
-                                                // Navigator.of(context).push(
-                                                //   MaterialPageRoute(
-                                                //     builder: (context) =>
-                                                //         PreviewScreen(
-                                                //       imageFile: _imageFile!,
-                                                //       fileList: allFileList,
-                                                //     ),
-                                                //   ),
-                                                // );
-                                              }
-                                            : null,
+                                      // Spacer(),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 8.0, top: 16.0),
                                         child: Container(
-                                          width: 60,
-                                          height: 60,
                                           decoration: BoxDecoration(
-                                            color: Colors.black,
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
-                                            border: Border.all(
-                                              color: Colors.white,
-                                              width: 2,
-                                            ),
-                                            image: _imageFile != null
-                                                ? DecorationImage(
-                                                    image:
-                                                        FileImage(_imageFile!),
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : null,
                                           ),
-                                          child: videoController != null &&
-                                                  videoController!
-                                                      .value.isInitialized
-                                              ? ClipRRect(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              _currentExposureOffset
+                                                      .toStringAsFixed(1) +
+                                                  'x',
+                                              style: const TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: RotatedBox(
+                                          quarterTurns: 3,
+                                          child: SizedBox(
+                                            height: 30,
+                                            child: Slider(
+                                              value: _currentExposureOffset,
+                                              min: _minAvailableExposureOffset,
+                                              max: _maxAvailableExposureOffset,
+                                              activeColor: Colors.white,
+                                              inactiveColor: Colors.white30,
+                                              onChanged: (value) async {
+                                                setState(() {
+                                                  _currentExposureOffset =
+                                                      value;
+                                                });
+                                                await controller!
+                                                    .setExposureOffset(value);
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Slider(
+                                              value: _currentZoomLevel,
+                                              min: _minAvailableZoom,
+                                              max: _maxAvailableZoom,
+                                              activeColor: Colors.white,
+                                              inactiveColor: Colors.white30,
+                                              onChanged: (value) async {
+                                                setState(() {
+                                                  _currentZoomLevel = value;
+                                                });
+                                                await controller!
+                                                    .setZoomLevel(value);
+                                              },
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 8.0),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.black87,
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  _currentZoomLevel
+                                                          .toStringAsFixed(1) +
+                                                      'x',
+                                                  style: const TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                _isCameraInitialized = false;
+                                              });
+                                              onNewCameraSelected(cameras[
+                                                  _isRearCameraSelected
+                                                      ? 1
+                                                      : 0]);
+                                              setState(() {
+                                                _isRearCameraSelected =
+                                                    !_isRearCameraSelected;
+                                              });
+                                            },
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                const Icon(
+                                                  Icons.circle,
+                                                  color: Colors.black38,
+                                                  size: 60,
+                                                ),
+                                                Icon(
+                                                  _isRearCameraSelected
+                                                      ? Icons.camera_front
+                                                      : Icons.camera_rear,
+                                                  color: Colors.white,
+                                                  size: 30,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () async {
+                                              XFile? rawImage =
+                                                  await takePicture();
+                                              _imageFile = File(rawImage!.path);
+                                            },
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: const [
+                                                Icon(
+                                                  Icons.circle,
+                                                  color: Colors.white38,
+                                                  size: 80,
+                                                ),
+                                                Icon(
+                                                  Icons.circle,
+                                                  color: Colors.white,
+                                                  size: 65,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () async {
+                                              final filePicked =
+                                                  await ImagePicker().pickImage(
+                                                      source:
+                                                          ImageSource.gallery);
+                                              if (filePicked!.path.isNotEmpty) {
+                                                setState(() {
+                                                  _imageFile =
+                                                      File(filePicked.path);
+                                                });
+                                              } else {}
+                                            },
+                                            child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                width: 60,
+                                                height: 60,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black
+                                                      .withOpacity(0.8),
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          8.0),
-                                                  child: AspectRatio(
-                                                    aspectRatio:
-                                                        videoController!
-                                                            .value.aspectRatio,
-                                                    child: VideoPlayer(
-                                                        videoController!),
+                                                          30.0),
+                                                  border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 2,
                                                   ),
-                                                )
-                                              : Container(),
-                                        ),
+                                                ),
+                                                child: SvgPicture.asset(
+                                                  'assets/icons/galery.svg',
+                                                )),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-              : Center(
+                    )
+              : const Center(
                   child: Text(
                     'LOADING',
                     style: TextStyle(color: Colors.white),
@@ -713,20 +587,20 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(),
-                Text(
+                const Text(
                   'Permission denied',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: () {
                     getPermissionStatus();
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Text(
                       'Give permission',
                       style: TextStyle(
