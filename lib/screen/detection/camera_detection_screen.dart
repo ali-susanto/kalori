@@ -209,6 +209,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                           InkWell(
                             onTap: () async {
                               setState(() {
+                                imageCache!.clear();
                                 _imageFile = File('');
                               });
                             },
