@@ -5,7 +5,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kalori/model/output_detection_model.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tflite/tflite.dart';
 // import 'package:video_player/video_player.dart';
 
 import '../../main.dart';
@@ -21,6 +23,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
     with WidgetsBindingObserver {
   CameraController? controller;
   File _imageFile = File('');
+  List output = [];
 
   bool _isCameraInitialized = false;
   bool _isCameraPermissionGranted = false;
@@ -139,9 +142,42 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
     controller!.setFocusPoint(offset);
   }
 
+  //load model
+  Future loadModel() async {
+    Tflite.close();
+    await Tflite.loadModel(
+        model: "assets/ssd_mobilenet.tflite",
+        labels: "assets/ssd_mobilenet.txt");
+  }
+
+  clasifyImage({required File image}) async {
+    try {
+      var outputFromModel = await Tflite.detectObjectOnImage(
+          path: image.path,
+          numResultsPerClass: 1,
+          imageMean: 127.5,
+          imageStd: 127.5,
+          threshold: 0.4);
+      setState(() {
+        print(outputFromModel);
+        var data = outputFromModel!.map((e) {
+          return e["detectedClass"];
+        }).toList();
+        print('data' + data.toString());
+
+        output = data;
+        // double dogruluk = output["confidenceInClass"];
+        print("${output}");
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   void initState() {
     getPermissionStatus();
+    loadModel();
     super.initState();
   }
 
@@ -162,7 +198,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
   @override
   void dispose() {
     controller?.dispose();
-
+    controller!.stopImageStream();
     super.dispose();
   }
 
@@ -517,6 +553,79 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                               XFile? rawImage =
                                                   await takePicture();
                                               _imageFile = File(rawImage!.path);
+                                              await clasifyImage(
+                                                  image: _imageFile);
+                                              showModalBottomSheet(
+                                                  backgroundColor:
+                                                      const Color(0xFF2566cf),
+                                                  shape: const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(16),
+                                                              topRight: Radius
+                                                                  .circular(
+                                                                      16))),
+                                                  context: context,
+                                                  builder: (_) {
+                                                    return SizedBox(
+                                                      height:
+                                                          size.height * 0.45,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(16),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Column(
+                                                              children: [
+                                                                const Text(
+                                                                    'Objek Terdeteksi',
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            24)),
+                                                                const SizedBox(
+                                                                  height: 35,
+                                                                ),
+                                                                Text(
+                                                                    '${output[0]}',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ))
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              width: size.width,
+                                                              child:
+                                                                  ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      },
+                                                                      child: const Text(
+                                                                          'Kembali')),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  });
                                             },
                                             child: Stack(
                                               alignment: Alignment.center,
@@ -544,6 +653,79 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                                 setState(() {
                                                   _imageFile =
                                                       File(filePicked.path);
+                                                  clasifyImage(
+                                                      image: _imageFile);
+
+                                                  showModalBottomSheet(
+                                                      backgroundColor:
+                                                          const Color(
+                                                              0xFF2566cf),
+                                                      shape: const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          16),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          16))),
+                                                      context: context,
+                                                      builder: (_) {
+                                                        return SizedBox(
+                                                          height: size.height *
+                                                              0.45,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(16),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Column(
+                                                                  children: [
+                                                                    const Text(
+                                                                        'Objek Terdeteksi',
+                                                                        style: TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            color: Colors.white,
+                                                                            fontSize: 24)),
+                                                                    const SizedBox(
+                                                                      height:
+                                                                          35,
+                                                                    ),
+                                                                    Text(
+                                                                        '${output[0]}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ))
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  width: size
+                                                                      .width,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                          child:
+                                                                              const Text('Kembali')),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
                                                 });
                                               } else {}
                                             },
