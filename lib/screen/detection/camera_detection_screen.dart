@@ -151,6 +151,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
   }
 
   clasifyImage({required File image}) async {
+    output.clear();
     try {
       var outputFromModel = await Tflite.detectObjectOnImage(
           path: image.path,
@@ -165,7 +166,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
         }).toList();
         print('data' + data.toString());
 
-        output = data;
+        output = data ?? [];
         // double dogruluk = output["confidenceInClass"];
         print("${output}");
       });
@@ -596,7 +597,9 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                                                   height: 35,
                                                                 ),
                                                                 Text(
-                                                                    '${output[0]}',
+                                                                    output.isEmpty
+                                                                        ? 'Objek Tidak Terdata'
+                                                                        : '${output[0]}',
                                                                     style:
                                                                         const TextStyle(
                                                                       fontSize:
@@ -697,7 +700,9 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                                                           35,
                                                                     ),
                                                                     Text(
-                                                                        '${output[0]}',
+                                                                        output.isEmpty
+                                                                            ? 'Objek Tidak Terdata'
+                                                                            : '${output[0]}',
                                                                         style:
                                                                             const TextStyle(
                                                                           fontSize:
