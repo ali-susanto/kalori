@@ -18,3 +18,5 @@ const double defaultPadding = 16.0;
 const TextStyle txtGeneralBoldWhite =
     TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold);
 const TextStyle txtLabelCircularSlider = TextStyle(color: Colors.white);
+const TextStyle txtLabelSmallCircularSlider =
+    TextStyle(color: Colors.white, fontSize: 10);
