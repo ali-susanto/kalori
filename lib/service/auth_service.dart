@@ -24,17 +24,7 @@ class AuthService with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> firstInitialized() async {
-    // await autoLogin().then((value) {
-    //   if (value) {
-    //     isAuth = true;
-    //     notifyListeners();
-    //   }
-    // });
-  }
-
   Future<bool> autoLogin() async {
-    // kita akan mengubah isAuth => true => autoLogin
     changeState(DataState.loading);
     try {
       final isSignIn = await _googleSignIn.isSignedIn();
@@ -42,7 +32,7 @@ class AuthService with ChangeNotifier {
         await _googleSignIn
             .signInSilently()
             .then((value) => _currentUser = value);
-        print('isLogin = $isSignIn');
+
         final googleAuth = await _currentUser!.authentication;
 
         final credential = GoogleAuthProvider.credential(
@@ -54,10 +44,6 @@ class AuthService with ChangeNotifier {
             .signInWithCredential(credential)
             .then((value) => userCredential = value);
 
-        print("USER CREDENTIAL");
-        print(userCredential);
-
-        // masukan data ke firebase...
         CollectionReference users = firestore.collection('users');
 
         await users.doc(_currentUser!.email).update({
@@ -70,10 +56,9 @@ class AuthService with ChangeNotifier {
         final currUserData = currUser.data() as Map<String, dynamic>;
 
         user = UsersModel.fromJson(currUserData);
-        print(user.photoUrl);
 
         isAuth = isSignIn;
-        print('isAuth $isAuth');
+
         notifyListeners();
         changeState(DataState.succes);
         return true;
@@ -88,7 +73,6 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> login() async {
-    String message = '';
     try {
       await _googleSignIn.signOut();
       await _googleSignIn.signIn().then((value) => _currentUser = value);
@@ -96,10 +80,6 @@ class AuthService with ChangeNotifier {
       final isLogin = await _googleSignIn.isSignedIn();
       print(isLogin);
       if (isLogin) {
-        print('Login Berhasil');
-
-        print(_currentUser);
-
         final googleAuth = await _currentUser!.authentication;
         final credential = GoogleAuthProvider.credential(
             idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
@@ -107,11 +87,7 @@ class AuthService with ChangeNotifier {
         await FirebaseAuth.instance
             .signInWithCredential(credential)
             .then((value) => userCredential = value);
-        // await FirebaseAuth.instance.signInWithGoogle(idToken: 'idToken', accessToken: '');
-        print('user credential ');
-        print(userCredential);
 
-        // masukan data ke firebase...
         CollectionReference users = firestore.collection('users');
 
         final checkuser = await users.doc(_currentUser!.email).get();
@@ -142,12 +118,10 @@ class AuthService with ChangeNotifier {
         final currUserData = currUser.data() as Map<String, dynamic>;
 
         user = (UsersModel.fromJson(currUserData));
-        print(user.name.toString());
         isAuth = isLogin;
-        print('auth $isAuth');
+
         notifyListeners();
       }
-      // isAuth = false;
       notifyListeners();
     } catch (e) {
       print(e.toString());
