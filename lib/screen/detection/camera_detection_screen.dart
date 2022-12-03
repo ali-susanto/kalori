@@ -5,7 +5,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kalori/model/output_detection_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:tflite/tflite.dart';

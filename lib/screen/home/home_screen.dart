@@ -51,6 +51,11 @@ class _HomeScreenState extends State<HomeScreen> {
               if (state.stateType == DataState.loading) {
                 return const HomeScreenShimmeer();
               }
+              if (state.stateType == DataState.error) {
+                return const Center(
+                  child: Text('Gagal Mendapatkan Data'),
+                );
+              }
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
