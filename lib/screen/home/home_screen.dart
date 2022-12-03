@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kalori/components/home_screen_shimmer.dart';
 import 'package:kalori/constants.dart';
 import 'package:kalori/enums.dart';
 import 'package:kalori/screen/detection/camera_detection_screen.dart';
@@ -48,9 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Consumer<AuthService>(
             builder: (context, state, child) {
               if (state.stateType == DataState.loading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const HomeScreenShimmeer();
               }
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,

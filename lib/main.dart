@@ -1,3 +1,4 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:camera/camera.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +9,7 @@ import 'package:kalori/screen/auth/login_screen.dart';
 import 'package:kalori/screen/detection/camera_detection_screen.dart';
 import 'package:kalori/screen/tips/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import 'constants.dart';
@@ -57,7 +59,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        '/bottom_nav_bar': (context) => const MainBody(),
+        '/bottom_nav_bar': (context) => const RootPage(),
         '/login': (context) => const LoginScreen(),
       },
       // home: const LoginScreen(),
@@ -66,42 +68,103 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainBody extends StatefulWidget {
-  const MainBody({Key? key}) : super(key: key);
+class RootPage extends StatefulWidget {
+  const RootPage({Key? key}) : super(key: key);
 
   @override
-  State<MainBody> createState() => _MainBodyState();
+  State<RootPage> createState() => _RootPageState();
 }
 
-class _MainBodyState extends State<MainBody> {
-  int selectedPage = 0;
-  final _page = const [
-    HomeScreen(),
-    CalculatorScreen(),
-    CameraDetectionScreen(),
-    TipsScreen(),
-    ProfileScreen()
+class _RootPageState extends State<RootPage> {
+  int _bottomNavIndex = 0;
+
+  //List of the pages
+  List<Widget> _widgetOptions() {
+    return [
+      const HomeScreen(),
+      const CalculatorScreen(),
+      const TipsScreen(),
+      const ProfileScreen()
+    ];
+  }
+
+  //List of the pages icons
+  List<IconData> iconList = [
+    Icons.home,
+    Icons.calculate_outlined,
+    Icons.public,
+    Icons.person,
   ];
+
+  //List of the pages titles
+  List<String> titleList = [
+    'Home',
+    'Calculator',
+    'Tips',
+    'Profile',
+  ];
+
+  // int selectedPage = 0;
+  // final _page = const [
+  //   HomeScreen(),
+  //   CalculatorScreen(),
+  //   CameraDetectionScreen(),
+  //   TipsScreen(),
+  //   ProfileScreen()
+  // ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: _page[selectedPage],
-        bottomNavigationBar: ConvexAppBar(
-          backgroundColor: kSecondaryBlue,
-          style: TabStyle.fixedCircle,
-          initialActiveIndex: selectedPage,
-          items: const [
-            TabItem(icon: Icons.home, title: 'Home'),
-            TabItem(icon: Icons.calculate_outlined, title: 'BMI'),
-            TabItem(icon: Icons.camera_alt, title: 'Scan'),
-            TabItem(icon: Icons.public, title: 'Tips'),
-            TabItem(icon: Icons.person, title: 'Profile')
-          ],
-          onTap: (int index) {
+      body: IndexedStack(
+        index: _bottomNavIndex,
+        children: _widgetOptions(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              PageTransition(
+                  child: const CameraDetectionScreen(),
+                  type: PageTransitionType.bottomToTop));
+        },
+        child: Image.asset(
+          'assets/icons/code-scan.png',
+          height: 30.0,
+        ),
+        backgroundColor: Colors.white,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+          splashColor: kPrimaryBlue,
+          activeColor: kPrimaryBlue,
+          inactiveColor: Colors.black.withOpacity(.5),
+          icons: iconList,
+          activeIndex: _bottomNavIndex,
+          gapLocation: GapLocation.center,
+          notchSmoothness: NotchSmoothness.softEdge,
+          onTap: (index) {
             setState(() {
-              selectedPage = index;
+              _bottomNavIndex = index;
             });
-          },
-        ));
+          }),
+    );
+    // body: _page[selectedPage],
+    // bottomNavigationBar: ConvexAppBar(
+    //   backgroundColor: kSecondaryBlue,
+    //   style: TabStyle.fixedCircle,
+    //   initialActiveIndex: selectedPage,
+    //   items: const [
+    //     TabItem(icon: Icons.home, title: 'Home'),
+    //     TabItem(icon: Icons.calculate_outlined, title: 'BMI'),
+    //     TabItem(icon: Icons.camera_alt, title: 'Scan'),
+    //     TabItem(icon: Icons.public, title: 'Tips'),
+    //     TabItem(icon: Icons.person, title: 'Profile')
+    //   ],
+    //   onTap: (int index) {
+    //     setState(() {
+    //       selectedPage = index;
+    //     });
+    //   },
+    // ));
   }
 }

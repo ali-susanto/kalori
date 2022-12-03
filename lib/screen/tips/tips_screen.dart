@@ -3,7 +3,6 @@ import 'package:kalori/screen/tips/tips_view_model.dart';
 
 import 'package:provider/provider.dart';
 
-
 import '../../components/large_content_shimmer.dart';
 import '../../components/small_content_shimmer.dart';
 import '../../constants.dart';
@@ -30,7 +29,7 @@ class _TipsScreenState extends State<TipsScreen> {
     Size size = MediaQuery.of(context).size;
     final viewModel = Provider.of<TipsViewModel>(context);
     return Scaffold(
-        backgroundColor: kWhiteColor,
+        backgroundColor: Colors.white,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: const Text(
@@ -38,7 +37,7 @@ class _TipsScreenState extends State<TipsScreen> {
             style: TextStyle(color: kBlackColor),
           ),
           centerTitle: true,
-          backgroundColor: kWhiteColor,
+          backgroundColor: Colors.white,
           elevation: 0,
         ),
         body: Padding(

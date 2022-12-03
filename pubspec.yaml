@@ -61,6 +61,8 @@ dependencies:
   path_provider: ^2.0.11
   image_picker: ^0.8.6
   shared_preferences: ^2.0.15
+  animated_bottom_navigation_bar: ^1.1.0
+  page_transition: ^2.0.9
   
 
 dev_dependencies:

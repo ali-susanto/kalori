@@ -211,7 +211,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
         leading: IconButton(
             onPressed: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => const MainBody()));
+                  context, MaterialPageRoute(builder: (_) => const RootPage()));
             },
             icon: const Icon(
               Icons.arrow_back_ios_outlined,
