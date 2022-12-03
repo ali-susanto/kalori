@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kalori/enums.dart';
 import 'package:kalori/model/users_model.dart';
 
 class AuthService with ChangeNotifier {
@@ -13,14 +14,35 @@ class AuthService with ChangeNotifier {
 
   var user = UsersModel();
 
+  DataState _stateType = DataState.loading;
+  DataState get stateType => _stateType;
+
+  String errorMessage = '';
+
+  void changeState(DataState s) {
+    _stateType = s;
+    notifyListeners();
+  }
+
+  Future<void> firstInitialized() async {
+    // await autoLogin().then((value) {
+    //   if (value) {
+    //     isAuth = true;
+    //     notifyListeners();
+    //   }
+    // });
+  }
+
   Future<bool> autoLogin() async {
     // kita akan mengubah isAuth => true => autoLogin
+    changeState(DataState.loading);
     try {
       final isSignIn = await _googleSignIn.isSignedIn();
       if (isSignIn) {
         await _googleSignIn
             .signInSilently()
             .then((value) => _currentUser = value);
+        print('isLogin = $isSignIn');
         final googleAuth = await _currentUser!.authentication;
 
         final credential = GoogleAuthProvider.credential(
@@ -44,18 +66,23 @@ class AuthService with ChangeNotifier {
         });
 
         final currUser = await users.doc(_currentUser!.email).get();
+        print(currUser);
         final currUserData = currUser.data() as Map<String, dynamic>;
 
         user = UsersModel.fromJson(currUserData);
+        print(user.photoUrl);
 
-        
-
-        
-
+        isAuth = isSignIn;
+        print('isAuth $isAuth');
+        notifyListeners();
+        changeState(DataState.succes);
         return true;
       }
+      notifyListeners();
       return false;
     } catch (err) {
+      changeState(DataState.error);
+      notifyListeners();
       return false;
     }
   }

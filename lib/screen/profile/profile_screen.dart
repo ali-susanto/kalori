@@ -50,13 +50,13 @@ class ProfileScreen extends StatelessWidget {
                   height: 175,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(200),
-                    child: viewModel.user.photoUrl! == "noimage"
+                    child: viewModel.user.photoUrl == null
                         ? Image.asset(
                             "assets/logo/noimage.png",
                             fit: BoxFit.cover,
                           )
                         : Image.network(
-                            viewModel.user.photoUrl!,
+                            viewModel.user.photoUrl ?? '',
                             fit: BoxFit.cover,
                           ),
                   ),

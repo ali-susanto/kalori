@@ -166,7 +166,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
         }).toList();
         print('data' + data.toString());
 
-        output = data ?? [];
+        output = data;
         // double dogruluk = output["confidenceInClass"];
         print("${output}");
       });

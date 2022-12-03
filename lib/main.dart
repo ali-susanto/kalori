@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalori/screen/auth/login_screen.dart';
 import 'package:kalori/screen/detection/camera_detection_screen.dart';
@@ -17,22 +18,32 @@ import 'screen/profile/profile_screen.dart';
 import 'screen/tips/tips_screen.dart';
 
 late List<CameraDescription> cameras;
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  await AuthService().autoLogin();
+  final isLogin = await AuthService().autoLogin();
+  print('isLogin main : $isLogin');
   try {
     cameras = await availableCameras();
   } on CameraException catch (e) {
     debugPrint('Gagal mendeteksi camera');
   }
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => TipsViewModel()),
-    ChangeNotifierProvider(create: (_) => AuthService()),
-  ], child: const MyApp()));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (_) => TipsViewModel()),
+                ChangeNotifierProvider(create: (_) => AuthService()),
+              ],
+              child: MyApp(
+                isLogin: isLogin,
+              ))));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.isLogin}) : super(key: key);
+  final bool isLogin;
 
   // This widget is the root of your application.
   @override
@@ -49,7 +60,8 @@ class MyApp extends StatelessWidget {
         '/bottom_nav_bar': (context) => const MainBody(),
         '/login': (context) => const LoginScreen(),
       },
-      home: const LoginScreen(),
+      // home: const LoginScreen(),
+      initialRoute: isLogin ? '/bottom_nav_bar' : '/login',
     );
   }
 }
