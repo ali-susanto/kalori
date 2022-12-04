@@ -21,6 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       Provider.of<AuthService>(context, listen: false).autoLogin();
     });
+
     // TODO: implement initState
     super.initState();
   }
@@ -28,6 +29,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     var viewModel = Provider.of<AuthService>(context, listen: false);
+    var tglLahirCtrl =
+        TextEditingController(text: viewModel.user.lastSignInTime);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -58,7 +61,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return const ProfileScreenShimmer();
           }
           if (state.stateType == DataState.error) {
-            return const Center(child: Text('Gagal Mendapatkan Data'),);
+            return const Center(
+              child: Text('Gagal Mendapatkan Data'),
+            );
           }
           return Column(
             children: [
@@ -106,31 +111,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 20),
               Expanded(
                 child: SizedBox(
-                  child: Column(
-                    children: [
-                      ListTile(
-                        onTap: () {},
-                        leading: const Icon(Icons.note_add_outlined),
-                        title: const Text(
-                          "Update Status",
-                          style: TextStyle(
-                            fontSize: 22,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          onTap: () {},
+                          keyboardType: TextInputType.text,
+                          readOnly: true,
+                          onChanged: (value) {},
+                          controller: tglLahirCtrl,
+                          validator: (value) {},
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                          decoration: const InputDecoration(
+                            // suffixIcon: suffixIcon,
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 10.0),
+                            labelText: 'Tanggal Lahir',
+                            fillColor: Colors.white,
+                            filled: true,
+                            // prefixText: prefixText,
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                                width: 2.0,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8.0),
+                              ),
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                                width: 2.0,
+                              ),
+                            ),
                           ),
                         ),
-                        trailing: const Icon(Icons.arrow_right),
-                      ),
-                      ListTile(
-                        onTap: () {},
-                        leading: const Icon(Icons.person),
-                        title: const Text(
-                          "Ubah Profile",
-                          style: TextStyle(
-                            fontSize: 22,
+                        ListTile(
+                          onTap: () {},
+                          leading: const Icon(Icons.person),
+                          title: const Text(
+                            "Ubah Profile",
+                            style: TextStyle(
+                              fontSize: 22,
+                            ),
                           ),
+                          trailing: const Icon(Icons.arrow_right),
                         ),
-                        trailing: const Icon(Icons.arrow_right),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
