@@ -32,7 +32,6 @@ class DetailTipsScreen extends StatelessWidget {
               )),
           backgroundColor: Colors.white,
           elevation: 0,
-          centerTitle: true,
           title: const Text(
             'Detail',
             style: TextStyle(color: kBlackColor),

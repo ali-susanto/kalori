@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalori/screen/auth/login_screen.dart';
 import 'package:kalori/screen/detection/camera_detection_screen.dart';
+import 'package:kalori/screen/detection/detection_view_models.dart';
 import 'package:kalori/view_models/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
 import 'package:page_transition/page_transition.dart';
@@ -16,7 +17,6 @@ import 'screen/calculator/calculator_screen.dart';
 import 'screen/history/history_screen.dart';
 import 'screen/home/home_screen.dart';
 import 'screen/profile/profile_screen.dart';
-
 
 late List<CameraDescription> cameras;
 Future<void> main() async {
@@ -35,6 +35,7 @@ Future<void> main() async {
               providers: [
                 ChangeNotifierProvider(create: (_) => TipsViewModel()),
                 ChangeNotifierProvider(create: (_) => AuthService()),
+                ChangeNotifierProvider(create: (_) => DetectionViewModel()),
               ],
               child: MyApp(
                 isLogin: isLogin,

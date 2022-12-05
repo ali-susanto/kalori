@@ -4,6 +4,7 @@ import 'package:kalori/components/small_content_shimmer.dart';
 import 'package:kalori/constants.dart';
 import 'package:kalori/enums.dart';
 import 'package:kalori/screen/detection/camera_detection_screen.dart';
+import 'package:kalori/screen/detection/detection_view_models.dart';
 import 'package:kalori/screen/home/detail_tips.dart';
 import 'package:kalori/view_models/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
@@ -48,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var viewModel = Provider.of<AuthService>(context, listen: false);
     var tipsViewModel = Provider.of<TipsViewModel>(context, listen: false);
+    var detectionViewModel =
+        Provider.of<DetectionViewModel>(context, listen: false);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
@@ -145,9 +148,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text('50',
-                                      style: TextStyle(
+                                children: [
+                                  Text(detectionViewModel.kalori ?? '0',
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 46,
                                         color: Colors.white,
@@ -172,7 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   SleekCircularSlider(
-                                    initialValue: 24,
+                                    initialValue: double.parse(
+                                        detectionViewModel.karbohidrat ??
+                                            "0.0"),
                                     appearance: CircularSliderAppearance(
                                       size: size.width * 0.35,
                                       customColors: CustomSliderColors(
@@ -192,7 +197,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   SleekCircularSlider(
-                                    initialValue: 44.50,
+                                    initialValue: double.parse(
+                                        detectionViewModel.protein ?? "0.0"),
                                     min: 0,
                                     max: 100,
                                     appearance: CircularSliderAppearance(

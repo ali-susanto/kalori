@@ -20,3 +20,16 @@ const TextStyle txtGeneralBoldWhite =
 const TextStyle txtLabelCircularSlider = TextStyle(color: Colors.white);
 const TextStyle txtLabelSmallCircularSlider =
     TextStyle(color: Colors.white, fontSize: 10);
+
+class dataObject {
+  List valueObject = [
+    {
+      "nama": "keyboard",
+      "kandungan": {"karbohidrat": "20", "protein": "10", "kalori": "15"}
+    },
+    {
+      "nama": "mouse",
+      "kandungan": {"karbohidrat": "10", "protein": "10", "kalori": "10"}
+    }
+  ];
+}
