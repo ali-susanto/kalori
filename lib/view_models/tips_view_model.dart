@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../enums.dart';
-import '../../model/tips_model.dart';
-import '../../service/tips_api.dart';
+import '../enums.dart';
+import '../model/tips_model.dart';
+import '../service/tips_api.dart';
 
 
 class TipsViewModel with ChangeNotifier {

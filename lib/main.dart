@@ -6,16 +6,17 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalori/screen/auth/login_screen.dart';
 import 'package:kalori/screen/detection/camera_detection_screen.dart';
-import 'package:kalori/screen/tips/tips_view_model.dart';
+import 'package:kalori/view_models/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import 'constants.dart';
 import 'screen/calculator/calculator_screen.dart';
+import 'screen/history/history_screen.dart';
 import 'screen/home/home_screen.dart';
 import 'screen/profile/profile_screen.dart';
-import 'screen/tips/tips_screen.dart';
+
 
 late List<CameraDescription> cameras;
 Future<void> main() async {
@@ -79,8 +80,8 @@ class _RootPageState extends State<RootPage> {
   List<Widget> _widgetOptions() {
     return [
       const HomeScreen(),
+      const HistoryScreen(),
       const CalculatorScreen(),
-      const TipsScreen(),
       const ProfileScreen()
     ];
   }
@@ -88,16 +89,16 @@ class _RootPageState extends State<RootPage> {
   //List of the pages icons
   List<IconData> iconList = [
     Icons.home,
+    Icons.history,
     Icons.calculate_outlined,
-    Icons.public,
     Icons.person,
   ];
 
   //List of the pages titles
   List<String> titleList = [
     'Home',
+    'History',
     'Calculator',
-    'Tips',
     'Profile',
   ];
   @override
