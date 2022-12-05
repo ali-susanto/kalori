@@ -14,9 +14,9 @@ class DetectionViewModel with ChangeNotifier {
 
   Future clasifyImage({required File image}) async {
     output.clear();
-    kalori = '';
-    karbohidrat = '';
-    protein = '';
+    kalori = '0';
+    karbohidrat = '0';
+    protein = '0';
     try {
       var outputFromModel = await Tflite.detectObjectOnImage(
           path: image.path,
