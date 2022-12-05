@@ -4,7 +4,8 @@ import 'package:kalori/components/small_content_shimmer.dart';
 import 'package:kalori/constants.dart';
 import 'package:kalori/enums.dart';
 import 'package:kalori/screen/detection/camera_detection_screen.dart';
-import 'package:kalori/screen/tips/tips_view_model.dart';
+import 'package:kalori/screen/home/detail_tips.dart';
+import 'package:kalori/view_models/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
@@ -222,17 +223,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 const SizedBox(
-                  height: 36,
+                  height: 30,
                 ),
                 const Text(
-                  'Tips kesehatan >',
+                  'Tips kesehatan ',
                   style: TextStyle(
                       fontSize: 17,
                       color: kPrimaryBlue,
                       fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 10,
                 ),
                 Consumer<TipsViewModel>(builder: (context, state, child) {
                   if (state.stateType == DataState.loading) {
@@ -249,7 +250,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => DetailTipsScreen(
+                                          image: tipsViewModel
+                                              .tipsData[index].image!,
+                                          title: tipsViewModel
+                                              .tipsData[index].title!,
+                                          headline: tipsViewModel
+                                              .tipsData[index].headline!,
+                                          content: tipsViewModel
+                                              .tipsData[index].content!,
+                                          id: tipsViewModel
+                                              .tipsData[index].id!)));
+                            },
                             child: Container(
                               width: size.width,
                               decoration: BoxDecoration(
