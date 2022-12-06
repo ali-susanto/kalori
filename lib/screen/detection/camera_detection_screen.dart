@@ -233,7 +233,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
       backgroundColor: Colors.black,
       body: _isCameraPermissionGranted
           ? _isCameraInitialized
-              ? _imageFile.path.isNotEmpty
+              ? _imageFile.path.isNotEmpty || _imageFile.path != ''
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -561,134 +561,139 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                               await viewModel.clasifyImage(
                                                   image: _imageFile);
                                               showModalBottomSheet(
-                                                  backgroundColor:
-                                                      const Color(0xFF2566cf),
-                                                  shape: const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(16),
-                                                              topRight: Radius
-                                                                  .circular(
-                                                                      16))),
-                                                  context: context,
-                                                  builder: (_) {
-                                                    return StatefulBuilder(
-                                                      builder:
-                                                          (context, setStates) {
-                                                        return SizedBox(
-                                                          height: size.height *
-                                                              0.45,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(16),
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Column(
+                                                backgroundColor:
+                                                    const Color(0xFF2566cf),
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        16),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        16))),
+                                                context: context,
+                                                builder: (_) {
+                                                  return SizedBox(
+                                                    height: size.height * 0.45,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              16),
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Column(
+                                                            children: [
+                                                              const SizedBox(
+                                                                height: 22,
+                                                              ),
+                                                              Text(
+                                                                  viewModel
+                                                                          .output
+                                                                          .isEmpty
+                                                                      ? 'Objek Tidak Terdata'
+                                                                      : '${viewModel.output[0]}',
+                                                                  style: const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          24)),
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        24,
+                                                                    vertical:
+                                                                        20),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
                                                                   children: [
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          22,
-                                                                    ),
-                                                                    Text(
-                                                                        viewModel.output.isEmpty
-                                                                            ? 'Objek Tidak Terdata'
-                                                                            : '${viewModel.output[0]}',
-                                                                        style: const TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                            color: Colors.white,
-                                                                            fontSize: 24)),
-                                                                    Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .symmetric(
-                                                                          horizontal:
-                                                                              24,
-                                                                          vertical:
-                                                                              20),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          SleekCircularSlider(
-                                                                            initialValue:
-                                                                                double.parse(viewModel.karbohidrat ?? "0.0"),
-                                                                            appearance:
-                                                                                CircularSliderAppearance(
-                                                                              size: size.width * 0.28,
-                                                                              customColors: CustomSliderColors(
-                                                                                  trackColor: Colors
-                                                                                      .greenAccent,
-                                                                                  progressBarColors: [
-                                                                                    Colors.lightGreen,
-                                                                                    Colors.amberAccent
-                                                                                  ],
-                                                                                  shadowMaxOpacity: 20.0),
-                                                                              infoProperties: InfoProperties(
-                                                                                  topLabelText: 'Karbohidrat',
-                                                                                  topLabelStyle: txtLabelSmallCircularSlider,
-                                                                                  modifier: (double value) {
-                                                                                    final gram = value.toDouble();
-                                                                                    return '$gram g';
-                                                                                  }),
-                                                                            ),
-                                                                          ),
-                                                                          SleekCircularSlider(
-                                                                            initialValue:
-                                                                                double.parse(viewModel.protein ?? "0.0"),
-                                                                            min:
-                                                                                0,
-                                                                            max:
-                                                                                100,
-                                                                            appearance:
-                                                                                CircularSliderAppearance(
-                                                                              size: size.width * 0.28,
-                                                                              customColors: CustomSliderColors(
-                                                                                  trackColor: Colors
-                                                                                      .orangeAccent,
-                                                                                  progressBarColors: [
-                                                                                    Colors.lightGreen,
-                                                                                    const Color(0xffFFBF00)
-                                                                                  ],
-                                                                                  shadowMaxOpacity: 20.0),
-                                                                              infoProperties: InfoProperties(
-                                                                                  topLabelText: 'Protein',
-                                                                                  topLabelStyle: txtLabelSmallCircularSlider,
-                                                                                  modifier: (double value) {
-                                                                                    final gram = value.toDouble();
-                                                                                    return '$gram g';
-                                                                                  }),
-                                                                            ),
-                                                                          ),
-                                                                        ],
+                                                                    SleekCircularSlider(
+                                                                      initialValue:
+                                                                          double.parse(viewModel.karbohidrat ??
+                                                                              "0.0"),
+                                                                      appearance:
+                                                                          CircularSliderAppearance(
+                                                                        size: size.width *
+                                                                            0.28,
+                                                                        customColors: CustomSliderColors(
+                                                                            trackColor: Colors
+                                                                                .greenAccent,
+                                                                            progressBarColors: [
+                                                                              Colors.lightGreen,
+                                                                              Colors.amberAccent
+                                                                            ],
+                                                                            shadowMaxOpacity:
+                                                                                20.0),
+                                                                        infoProperties: InfoProperties(
+                                                                            topLabelText: 'Karbohidrat',
+                                                                            topLabelStyle: txtLabelSmallCircularSlider,
+                                                                            modifier: (double value) {
+                                                                              final gram = value.toDouble();
+                                                                              return '$gram g';
+                                                                            }),
                                                                       ),
-                                                                    )
+                                                                    ),
+                                                                    SleekCircularSlider(
+                                                                      initialValue:
+                                                                          double.parse(viewModel.protein ??
+                                                                              "0.0"),
+                                                                      min: 0,
+                                                                      max: 100,
+                                                                      appearance:
+                                                                          CircularSliderAppearance(
+                                                                        size: size.width *
+                                                                            0.28,
+                                                                        customColors: CustomSliderColors(
+                                                                            trackColor: Colors
+                                                                                .orangeAccent,
+                                                                            progressBarColors: [
+                                                                              Colors.lightGreen,
+                                                                              const Color(0xffFFBF00)
+                                                                            ],
+                                                                            shadowMaxOpacity:
+                                                                                20.0),
+                                                                        infoProperties: InfoProperties(
+                                                                            topLabelText: 'Protein',
+                                                                            topLabelStyle: txtLabelSmallCircularSlider,
+                                                                            modifier: (double value) {
+                                                                              final gram = value.toDouble();
+                                                                              return '$gram g';
+                                                                            }),
+                                                                      ),
+                                                                    ),
                                                                   ],
                                                                 ),
-                                                                SizedBox(
-                                                                  width: size
-                                                                      .width,
-                                                                  child:
-                                                                      ElevatedButton(
-                                                                          onPressed:
-                                                                              () {
-                                                                            Navigator.pop(context);
-                                                                          },
-                                                                          child:
-                                                                              const Text('Kembali')),
-                                                                )
-                                                              ],
-                                                            ),
+                                                              )
+                                                            ],
                                                           ),
-                                                        );
-                                                      },
-                                                    );
-                                                  });
+                                                          SizedBox(
+                                                            width: size.width,
+                                                            child:
+                                                                ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    child: const Text(
+                                                                        'Kembali')),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
                                             },
                                             child: Stack(
                                               alignment: Alignment.center,
@@ -714,10 +719,13 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                                           ImageSource.gallery);
                                               if (filePicked!.path.isNotEmpty) {
                                                 setState(() async {
-                                                  _imageFile =
-                                                      File(filePicked.path);
+                                                  setState(() {
+                                                    _imageFile =
+                                                        File(filePicked.path);
+                                                  });
                                                   await viewModel.clasifyImage(
-                                                      image: _imageFile);
+                                                      image: File(
+                                                          filePicked.path));
 
                                                   showModalBottomSheet(
                                                       backgroundColor:
