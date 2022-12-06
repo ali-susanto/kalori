@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(greetingMessage(),
                                       style: const TextStyle(
                                           color: Colors.black87,
-                                          fontWeight: FontWeight.w400,
+                                          fontWeight: FontWeight.w700,
                                           fontSize: 24)),
                                   const SizedBox(
                                     height: 5,
