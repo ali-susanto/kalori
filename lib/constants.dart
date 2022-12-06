@@ -24,12 +24,24 @@ const TextStyle txtLabelSmallCircularSlider =
 class dataObject {
   List valueObject = [
     {
-      "nama": "keyboard",
-      "kandungan": {"karbohidrat": "20", "protein": "10", "kalori": "15"}
+      "nama": "apple",
+      "kandungan": {"karbohidrat": "14.9", "protein": "0.3", "kalori": "52.1"}
     },
     {
-      "nama": "mouse",
-      "kandungan": {"karbohidrat": "10", "protein": "10", "kalori": "10"}
-    }
+      "nama": "pisang",
+      "kandungan": {"karbohidrat": "26.3", "protein": "0.8", "kalori": "88.7"}
+    },
+    {
+      "nama": "pizza",
+      "kandungan": {"karbohidrat": "29.6", "protein": "14", "kalori": "360"}
+    },
+    {
+      "nama": "donut",
+      "kandungan": {"karbohidrat": "34.44", "protein": "2.7", "kalori": "250"}
+    },
+    {
+      "nama": "hot dog",
+      "kandungan": {"karbohidrat": "18.03", "protein": "10.39", "kalori": "242"}
+    },
   ];
 }

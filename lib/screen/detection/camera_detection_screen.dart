@@ -148,9 +148,14 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
   //load model
   Future loadModel() async {
     Tflite.close();
-    await Tflite.loadModel(
-        model: "assets/ssd_mobilenet.tflite",
-        labels: "assets/ssd_mobilenet.txt");
+    try {
+      await Tflite.loadModel(
+          model: "assets/ssd_mobilenet.tflite",
+          labels: "assets/ssd_mobilenet.txt");
+      print('sukses');
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   // clasifyImage({required File image}) async {

@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const SizedBox(
                                     width: 5,
                                   ),
-                                  const Text('Kalori',
+                                  const Text('Kcal',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 26,
