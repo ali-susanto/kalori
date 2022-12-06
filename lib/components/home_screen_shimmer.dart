@@ -8,7 +8,7 @@ class HomeScreenShimmeer extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: Column(
         children: [
           Column(
@@ -57,8 +57,8 @@ class HomeScreenShimmeer extends StatelessWidget {
             highlightColor: Colors.white,
             child: Container(
               width: size.width,
-              height: size.height * 0.3,
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              height: size.height * 0.28,
+              // padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(12)),
             ),

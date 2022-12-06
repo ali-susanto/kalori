@@ -105,7 +105,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.all(10.0),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(200),
-                                      child: viewModel.user.photoUrl == null
+                                      child: viewModel.user.photoUrl == null ||
+                                              viewModel.user.photoUrl!.isEmpty
                                           ? Image.asset(
                                               "assets/logo/noimage.png",
                                               height: 50,
@@ -155,10 +156,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontSize: 46,
                                         color: Colors.white,
                                       )),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 5,
                                   ),
-                                  Text('Kalori',
+                                  const Text('Kalori',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 26,
@@ -243,7 +244,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Consumer<TipsViewModel>(builder: (context, state, child) {
                   if (state.stateType == DataState.loading) {
-                    return SmallContentShimmer(size: size);
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ...List.generate(
+                              4, (index) => SmallContentShimmer(size: size))
+                        ],
+                      ),
+                    );
                   }
                   if (state.stateType == DataState.error) {
                     return const Center(
