@@ -52,8 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       loginService.isAuth == true
                           ? Fluttertoast.showToast(msg: 'User Log In').then(
-                              (value) => Navigator.pushNamed(
-                                  context, '/bottom_nav_bar'))
+                              (value) => Navigator.pushReplacementNamed(
+                                  context, '/root_page'))
                           : Navigator.pushNamed(context, '/login');
                     },
                     child: Row(

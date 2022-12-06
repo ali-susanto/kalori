@@ -58,11 +58,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        '/root': (context) => const RootPage(),
+        '/root_page': (context) => const RootPage(),
         '/login': (context) => const LoginScreen(),
       },
       // home: const LoginScreen(),
-      initialRoute: isLogin ? '/root' : '/login',
+      initialRoute: isLogin ? '/root_page' : '/login',
     );
   }
 }
