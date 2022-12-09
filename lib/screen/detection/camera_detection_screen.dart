@@ -5,7 +5,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kalori/screen/detection/detection_view_models.dart';
+import 'package:kalori/service/auth_service.dart';
+import 'package:kalori/view_models/detection_view_models.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
@@ -158,31 +159,6 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
     }
   }
 
-  // clasifyImage({required File image}) async {
-  //   output.clear();
-  //   try {
-  //     var outputFromModel = await Tflite.detectObjectOnImage(
-  //         path: image.path,
-  //         numResultsPerClass: 1,
-  //         imageMean: 127.5,
-  //         imageStd: 127.5,
-  //         threshold: 0.4);
-  //     setState(() {
-  //       print(outputFromModel);
-  //       var data = outputFromModel!.map((e) {
-  //         return e["detectedClass"];
-  //       }).toList();
-  //       print('data' + data.toString());
-
-  //       output = data;
-  //       // double dogruluk = output["confidenceInClass"];
-  //       print("${output}");
-  //     });
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  // }
-
   @override
   void initState() {
     getPermissionStatus();
@@ -215,17 +191,29 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     var viewModel = Provider.of<DetectionViewModel>(context, listen: false);
+    var authViewModel = Provider.of<AuthService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => const RootPage()));
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () {
+              authViewModel.autoLogin().then((value) => Navigator.pop(context));
             },
-            icon: const Icon(
-              Icons.arrow_back_ios_outlined,
-              color: Colors.black87,
-            )),
+            child: Container(
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                color: kPrimaryBlue.withOpacity(.15),
+              ),
+              child: const Icon(
+                Icons.close,
+                color: kPrimaryBlue,
+              ),
+            ),
+          ),
+        ),
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.white,

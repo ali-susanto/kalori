@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kalori/screen/auth/login_screen.dart';
 import 'package:kalori/screen/detection/camera_detection_screen.dart';
-import 'package:kalori/screen/detection/detection_view_models.dart';
+import 'package:kalori/view_models/detection_view_models.dart';
 import 'package:kalori/view_models/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
 import 'package:page_transition/page_transition.dart';
@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Kalori',
       theme: ThemeData(
         textTheme: GoogleFonts.nunitoTextTheme(

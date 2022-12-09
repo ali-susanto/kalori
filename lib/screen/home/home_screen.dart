@@ -4,7 +4,7 @@ import 'package:kalori/components/small_content_shimmer.dart';
 import 'package:kalori/constants.dart';
 import 'package:kalori/enums.dart';
 import 'package:kalori/screen/detection/camera_detection_screen.dart';
-import 'package:kalori/screen/detection/detection_view_models.dart';
+import 'package:kalori/view_models/detection_view_models.dart';
 import 'package:kalori/screen/home/detail_tips.dart';
 import 'package:kalori/view_models/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
