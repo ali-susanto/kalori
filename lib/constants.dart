@@ -33,7 +33,7 @@ class dataObject {
     },
     {
       "nama": "pizza",
-      "kandungan": {"karbohidrat": "29.6", "protein": "14", "kalori": "360"}
+      "kandungan": {"karbohidrat": "29", "protein": "14", "kalori": "360"}
     },
     {
       "nama": "donut",
