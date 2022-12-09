@@ -23,6 +23,8 @@ class Styles {
   static const TextStyle txtLabelSmallCircularSlider =
       TextStyle(color: Colors.white, fontSize: 10);
   static const TextStyle txtRegular = TextStyle(fontSize: 14);
+  static const TextStyle txtLabelRegularCircularSlider =
+      TextStyle(fontSize: 14, fontWeight: FontWeight.w600);
 }
 
 class dataObject {
