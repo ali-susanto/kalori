@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               const Text(
                                 'kalori hari ini',
-                                style: txtGeneralBoldWhite,
+                                style: Styles.txtGeneralBoldWhite,
                               ),
                               const SizedBox(
                                 height: 10,
@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           shadowMaxOpacity: 20.0),
                                       infoProperties: InfoProperties(
                                           topLabelText: 'Karbohidrat',
-                                          topLabelStyle: txtLabelCircularSlider,
+                                          topLabelStyle: Styles.txtLabelCircularSlider,
                                           modifier: (double value) {
                                             final gram = value.toDouble();
                                             return '$gram g';
@@ -213,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           shadowMaxOpacity: 20.0),
                                       infoProperties: InfoProperties(
                                           topLabelText: 'Protein',
-                                          topLabelStyle: txtLabelCircularSlider,
+                                          topLabelStyle: Styles.txtLabelCircularSlider,
                                           modifier: (double value) {
                                             final gram = value.toDouble();
                                             return '$gram g';
@@ -268,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => DetailTipsScreen(
+                                      builder: (context) => DetailTipsScreen(
                                           image: tipsViewModel
                                               .tipsData[index].image!,
                                           title: tipsViewModel

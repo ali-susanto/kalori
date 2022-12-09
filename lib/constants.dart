@@ -15,11 +15,15 @@ const kSecondaryGreen = Color(0xFF769152);
 
 const double defaultPadding = 16.0;
 
-const TextStyle txtGeneralBoldWhite =
-    TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold);
-const TextStyle txtLabelCircularSlider = TextStyle(color: Colors.white);
-const TextStyle txtLabelSmallCircularSlider =
-    TextStyle(color: Colors.white, fontSize: 10);
+class Styles {
+  static const TextStyle txtGeneralBoldWhite =
+      TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold);
+  static const TextStyle txtLabelCircularSlider =
+      TextStyle(color: Colors.white);
+  static const TextStyle txtLabelSmallCircularSlider =
+      TextStyle(color: Colors.white, fontSize: 10);
+  static const TextStyle txtRegular = TextStyle(fontSize: 14);
+}
 
 class dataObject {
   List valueObject = [

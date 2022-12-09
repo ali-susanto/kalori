@@ -629,7 +629,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                                                                 20.0),
                                                                         infoProperties: InfoProperties(
                                                                             topLabelText: 'Karbohidrat',
-                                                                            topLabelStyle: txtLabelSmallCircularSlider,
+                                                                            topLabelStyle: Styles.txtLabelSmallCircularSlider,
                                                                             modifier: (double value) {
                                                                               final gram = value.toDouble();
                                                                               return '$gram g';
@@ -657,7 +657,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                                                                 20.0),
                                                                         infoProperties: InfoProperties(
                                                                             topLabelText: 'Protein',
-                                                                            topLabelStyle: txtLabelSmallCircularSlider,
+                                                                            topLabelStyle: Styles.txtLabelSmallCircularSlider,
                                                                             modifier: (double value) {
                                                                               final gram = value.toDouble();
                                                                               return '$gram g';
@@ -790,7 +790,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                                                                   shadowMaxOpacity: 20.0),
                                                                               infoProperties: InfoProperties(
                                                                                   topLabelText: 'Karbohidrat',
-                                                                                  topLabelStyle: txtLabelSmallCircularSlider,
+                                                                                  topLabelStyle: Styles.txtLabelSmallCircularSlider,
                                                                                   modifier: (double value) {
                                                                                     final gram = value.toDouble();
                                                                                     return '$gram g';
@@ -817,7 +817,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
                                                                                   shadowMaxOpacity: 20.0),
                                                                               infoProperties: InfoProperties(
                                                                                   topLabelText: 'Protein',
-                                                                                  topLabelStyle: txtLabelSmallCircularSlider,
+                                                                                  topLabelStyle: Styles.txtLabelSmallCircularSlider,
                                                                                   modifier: (double value) {
                                                                                     final gram = value.toDouble();
                                                                                     return '$gram g';
