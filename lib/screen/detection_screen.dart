@@ -10,7 +10,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
-
 import '../constants.dart';
 import '../main.dart';
 
@@ -68,7 +67,7 @@ class _DetectionScreenState extends State<DetectionScreen>
       XFile file = await cameraController.takePicture();
       return file;
     } on CameraException catch (e) {
-      print('Error when taking picture: $e');
+      debugPrint('Error when taking picture: $e');
       return null;
     }
   }
@@ -120,7 +119,7 @@ class _DetectionScreenState extends State<DetectionScreen>
 
       _currentFlashMode = controller!.value.flashMode;
     } on CameraException catch (e) {
-      print('Error initializing camera: $e');
+      debugPrint('Error initializing camera: $e');
     }
 
     if (mounted) {
