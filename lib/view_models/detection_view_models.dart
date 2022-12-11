@@ -18,12 +18,12 @@ class DetectionViewModel with ChangeNotifier {
     karbohidrat = '0';
     protein = '0';
     try {
-      var outputFromModel = await Tflite.detectObjectOnImage(
+      var outputFromModel = await Tflite.runModelOnImage(
           path: image.path,
-          numResultsPerClass: 1,
+          numResults: 2,
           imageMean: 127.5,
           imageStd: 127.5,
-          threshold: 0.4);
+          threshold: 0.5);
 
       print(outputFromModel);
       var data = outputFromModel!.map((e) {

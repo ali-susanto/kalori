@@ -151,8 +151,8 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
     Tflite.close();
     try {
       await Tflite.loadModel(
-          model: "assets/ssd_mobilenet.tflite",
-          labels: "assets/ssd_mobilenet.txt");
+          model: "assets/models/model_unquant.tflite",
+          labels: "assets/models/labels.txt");
       print('sukses');
     } catch (e) {
       print(e.toString());
@@ -198,9 +198,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-              authViewModel
-                  .autoLogin()
-                  .then((value) => Navigator.pushNamed(context, '/root_page'));
+              Navigator.pushNamed(context, '/root_page');
             },
             child: Container(
               height: 30,

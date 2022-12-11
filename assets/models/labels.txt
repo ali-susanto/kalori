@@ -1,0 +1,10 @@
+0 Bakso
+1 Gado-gado
+2 Mie Ayam
+3 Martabak Telor
+4 Ketoprak
+5 Rendang
+6 Soto Betawi
+7 Gulai Kambing
+8 Semur Jengkol
+9 Sate
