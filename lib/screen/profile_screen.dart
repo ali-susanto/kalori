@@ -5,8 +5,8 @@ import 'package:kalori/components/profile_scren_shimmer.dart';
 import 'package:kalori/service/auth_service.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants.dart';
-import '../../enums.dart';
+import '../constants.dart';
+import '../enums.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

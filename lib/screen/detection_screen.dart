@@ -5,29 +5,26 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kalori/service/auth_service.dart';
 import 'package:kalori/view_models/detection_view_models.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:tflite/tflite.dart';
-// import 'package:video_player/video_player.dart';
 
-import '../../constants.dart';
-import '../../main.dart';
 
-class CameraDetectionScreen extends StatefulWidget {
-  const CameraDetectionScreen({Key? key}) : super(key: key);
+import '../constants.dart';
+import '../main.dart';
+
+class DetectionScreen extends StatefulWidget {
+  const DetectionScreen({Key? key}) : super(key: key);
 
   @override
-  State<CameraDetectionScreen> createState() => _CameraDetectionScreenState();
+  State<DetectionScreen> createState() => _DetectionScreenState();
 }
 
-class _CameraDetectionScreenState extends State<CameraDetectionScreen>
+class _DetectionScreenState extends State<DetectionScreen>
     with WidgetsBindingObserver {
   CameraController? controller;
   File _imageFile = File('');
-  // List output = [];
 
   bool _isCameraInitialized = false;
   bool _isCameraPermissionGranted = false;
@@ -71,7 +68,7 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
       XFile file = await cameraController.takePicture();
       return file;
     } on CameraException catch (e) {
-      print('Error occured while taking picture: $e');
+      print('Error when taking picture: $e');
       return null;
     }
   }
@@ -146,23 +143,12 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
     controller!.setFocusPoint(offset);
   }
 
-  //load model
-  Future loadModel() async {
-    Tflite.close();
-    try {
-      await Tflite.loadModel(
-          model: "assets/models/model_unquant.tflite",
-          labels: "assets/models/labels.txt");
-      print('sukses');
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
   @override
   void initState() {
     getPermissionStatus();
-    loadModel();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      Provider.of<DetectionViewModel>(context, listen: false).loadModel();
+    });
     super.initState();
   }
 
@@ -191,7 +177,6 @@ class _CameraDetectionScreenState extends State<CameraDetectionScreen>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     var viewModel = Provider.of<DetectionViewModel>(context, listen: false);
-    var authViewModel = Provider.of<AuthService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: Padding(

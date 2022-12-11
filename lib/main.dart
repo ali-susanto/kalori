@@ -4,8 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kalori/screen/auth/login_screen.dart';
-import 'package:kalori/screen/detection/camera_detection_screen.dart';
+import 'package:kalori/screen/login_screen.dart';
+import 'package:kalori/screen/detection_screen.dart';
 import 'package:kalori/view_models/detection_view_models.dart';
 import 'package:kalori/view_models/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
@@ -13,10 +13,10 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import 'constants.dart';
-import 'screen/calculator/calculator_screen.dart';
-import 'screen/history/history_screen.dart';
-import 'screen/home/home_screen.dart';
-import 'screen/profile/profile_screen.dart';
+import 'screen/calculator_screen.dart';
+import 'screen/history_screen.dart';
+import 'screen/home_screen.dart';
+import 'screen/profile_screen.dart';
 
 late List<CameraDescription> cameras;
 Future<void> main() async {
@@ -115,7 +115,7 @@ class _RootPageState extends State<RootPage> {
           Navigator.push(
               context,
               PageTransition(
-                  child: const CameraDetectionScreen(),
+                  child: const DetectionScreen(),
                   type: PageTransitionType.bottomToTop));
         },
         child: Image.asset(

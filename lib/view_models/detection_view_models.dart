@@ -11,6 +11,18 @@ class DetectionViewModel with ChangeNotifier {
   String? kalori;
   String? karbohidrat;
   String? protein;
+  
+  Future loadModel() async {
+    Tflite.close();
+    try {
+      await Tflite.loadModel(
+          model: "assets/models/model_unquant.tflite",
+          labels: "assets/models/labels.txt");
+      print('sukses');
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   Future clasifyImage({required File image}) async {
     output.clear();
