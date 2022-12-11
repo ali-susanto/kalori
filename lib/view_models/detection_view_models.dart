@@ -11,7 +11,7 @@ class DetectionViewModel with ChangeNotifier {
   String? kalori;
   String? karbohidrat;
   String? protein;
-  
+
   Future loadModel() async {
     Tflite.close();
     try {
@@ -37,14 +37,12 @@ class DetectionViewModel with ChangeNotifier {
           imageStd: 127.5,
           threshold: 0.5);
 
-      print(outputFromModel);
       var data = outputFromModel!.map((e) {
-        return e["detectedClass"];
+        return e["label"].replaceAll(RegExp(r'[0-9]'), '').substring(1);
       }).toList();
-      print('data' + data.toString());
       output = data;
 
-      for (var element in dataObject().valueObject) {
+      for (var element in DataObject().valueObject) {
         if (element["nama"]
             .toString()
             .toLowerCase()
@@ -57,10 +55,9 @@ class DetectionViewModel with ChangeNotifier {
         }
       }
 
-      print("${output}");
       notifyListeners();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }
