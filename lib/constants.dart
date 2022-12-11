@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 const kPrimaryColor = Color(0xFF6F35A5);
@@ -27,27 +25,47 @@ class Styles {
       TextStyle(fontSize: 14, fontWeight: FontWeight.w600);
 }
 
-class dataObject {
+class DataObject {
   List valueObject = [
     {
-      "nama": "apple",
-      "kandungan": {"karbohidrat": "14.9", "protein": "0.3", "kalori": "52.1"}
+      "nama": "Bakso",
+      "kandungan": {"karbohidrat": "16.4", "protein": "5.3","lemak":"3", "kalori": "114  "}
     },
     {
-      "nama": "pisang",
-      "kandungan": {"karbohidrat": "26.3", "protein": "0.8", "kalori": "88.7"}
+      "nama": "Gado-gado",
+      "kandungan": {"karbohidrat": "21", "protein": "6.1","lemak":"3.2", "kalori": "137"}
     },
     {
-      "nama": "pizza",
-      "kandungan": {"karbohidrat": "29", "protein": "14", "kalori": "360"}
+      "nama": "Mie ayam",
+      "kandungan": {"karbohidrat": "10.5", "protein": "6.2","lemak":"3.9", "kalori": "102"}
     },
     {
-      "nama": "donut",
-      "kandungan": {"karbohidrat": "34.44", "protein": "2.7", "kalori": "250"}
+      "nama": "Martabak Telor",
+      "kandungan": {"karbohidrat": "45", "protein": "5.1","lemak":"8.6", "kalori": "278"}
     },
     {
-      "nama": "hot dog",
-      "kandungan": {"karbohidrat": "18.03", "protein": "10.39", "kalori": "242"}
+      "nama": "Ketoprak",
+      "kandungan": {"karbohidrat": "13", "protein": "7.9","lemak":"7.7", "kalori": "153"}
+    },
+    {
+      "nama": "Rendang",
+      "kandungan": {"karbohidrat": "7.8", "protein": "22.6","lemak":"7.9", "kalori": "193"}
+    },
+    {
+      "nama": "Soto Betawi",
+      "kandungan": {"karbohidrat": "11.5", "protein": "2.5","lemak":"8.8", "kalori": "135"}
+    },
+    {
+      "nama": "Gulai Kambing",
+      "kandungan": {"karbohidrat": "6.2", "protein": "4.2","lemak":"9.4", "kalori": "126"}
+    },
+    {
+      "nama": "Semur Jengkol",
+      "kandungan": {"karbohidrat": "29.1", "protein": "6", "lemak":"10","kalori": "212"}
+    },
+    {
+      "nama": "Sate",
+      "kandungan": {"karbohidrat": "14.82", "protein": "19.54","lemak":"14.82", "kalori": "225"}
     },
   ];
 }
