@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kalori/screen/detection_info_screen.dart';
 import 'package:kalori/screen/login_screen.dart';
 import 'package:kalori/screen/detection_screen.dart';
 import 'package:kalori/view_models/detection_view_models.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/root_page': (context) => const RootPage(),
         '/login': (context) => const LoginScreen(),
+        '/info': (context) => const DetectionInfoScreen(),
       },
       // home: const LoginScreen(),
       initialRoute: isLogin ? '/root_page' : '/login',
