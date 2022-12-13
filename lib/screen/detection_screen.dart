@@ -181,95 +181,7 @@ class _DetectionScreenState extends State<DetectionScreen>
       body: _isCameraPermissionGranted
           ? _isCameraInitialized
               ? _imageFile.path.isNotEmpty || _imageFile.path != ''
-                  ? SafeArea(
-                      child: Center(
-                        child: Stack(children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Image.file(
-                                  _imageFile,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              InkWell(
-                                onTap: () async {
-                                  setState(() {
-                                    imageCache!.clear();
-                                    _imageFile = File('');
-                                  });
-                                },
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: const [
-                                    Icon(
-                                      Icons.circle,
-                                      color: Colors.white,
-                                      size: 80,
-                                    ),
-                                    Icon(
-                                      Icons.cancel,
-                                      color: Colors.red,
-                                      size: 65,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 20),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      imageCache!.clear();
-                                      _imageFile = File('');
-                                      Navigator.pushNamed(
-                                          context, '/root_page');
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(25),
-                                        color: kPrimaryBlue.withOpacity(.5),
-                                      ),
-                                      child: const Icon(
-                                        Icons.close,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(context, '/info');
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(25),
-                                        color: kPrimaryBlue.withOpacity(.5),
-                                      ),
-                                      child: const Icon(
-                                        Icons.info,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                          )
-                        ]),
-                      ),
-                    )
+                  ? showImage(context)
                   : SafeArea(
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 16),
@@ -726,41 +638,138 @@ class _DetectionScreenState extends State<DetectionScreen>
                         ),
                       ),
                     )
-              : const Center(
-                  child: Text(
-                    'LOADING',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(),
-                const Text(
-                  'Permission denied',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
+              : loadingCamera()
+          : permissionCameraDenied(),
+    );
+  }
+
+  Widget permissionCameraDenied() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(),
+        const Text(
+          'Perizinan Kamera di tolak',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+          ),
+        ),
+        const SizedBox(height: 24),
+        ElevatedButton(
+          onPressed: () {
+            getPermissionStatus();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Berikan perizinan',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget loadingCamera() {
+    return const Center(
+      child: Text(
+        'LOADING',
+        style: TextStyle(color: Colors.white),
+      ),
+    );
+  }
+
+  Widget showImage(BuildContext context) {
+    return SafeArea(
+      child: Center(
+        child: Stack(children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Image.file(
+                  _imageFile,
                 ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: () {
-                    getPermissionStatus();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Give permission',
-                      style: TextStyle(
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              InkWell(
+                onTap: () async {
+                  setState(() {
+                    imageCache!.clear();
+                    _imageFile = File('');
+                  });
+                },
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: const [
+                    Icon(
+                      Icons.circle,
+                      color: Colors.white,
+                      size: 80,
+                    ),
+                    Icon(
+                      Icons.cancel,
+                      color: Colors.red,
+                      size: 65,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      imageCache!.clear();
+                      _imageFile = File('');
+                      Navigator.pushNamed(context, '/root_page');
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: kPrimaryBlue.withOpacity(.5),
+                      ),
+                      child: const Icon(
+                        Icons.close,
                         color: Colors.white,
-                        fontSize: 24,
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/info');
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: kPrimaryBlue.withOpacity(.5),
+                      ),
+                      child: const Icon(
+                        Icons.info,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ]),
+          )
+        ]),
+      ),
     );
   }
 }
