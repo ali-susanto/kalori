@@ -11,6 +11,7 @@ class DetectionViewModel with ChangeNotifier {
   String? kalori;
   String? karbohidrat;
   String? protein;
+  String? lemak;
 
   Future loadModel() async {
     Tflite.close();
@@ -50,6 +51,7 @@ class DetectionViewModel with ChangeNotifier {
           kalori = element["kandungan"]["kalori"];
           karbohidrat = element["kandungan"]["karbohidrat"];
           protein = element["kandungan"]["protein"];
+          lemak = element["kandungan"]["lemak"];
 
           notifyListeners();
         }
