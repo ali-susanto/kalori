@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kalori/components/home_screen_shimmer.dart';
 import 'package:kalori/components/small_content_shimmer.dart';
 import 'package:kalori/constants.dart';
 import 'package:kalori/enums.dart';
-import 'package:kalori/screen/detection_screen.dart';
 import 'package:kalori/view_models/detection_view_models.dart';
 import 'package:kalori/screen/detail_tips.dart';
 import 'package:kalori/view_models/tips_view_model.dart';
@@ -129,102 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(
                           height: 25,
                         ),
-                        Container(
-                          width: size.width,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 16),
-                          decoration: BoxDecoration(
-                              color: Colors.blueAccent,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'kalori hari ini',
-                                style: Styles.txtGeneralBoldWhite,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(detectionViewModel.kalori ?? '0',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 46,
-                                        color: Colors.white,
-                                      )),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  const Text('Kcal',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 26,
-                                        color: Colors.white,
-                                      )),
-                                ],
-                              ),
-                              const Divider(color: Colors.white),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SleekCircularSlider(
-                                    initialValue: double.parse(
-                                        detectionViewModel.karbohidrat ??
-                                            "0.0"),
-                                    appearance: CircularSliderAppearance(
-                                      size: size.width * 0.35,
-                                      customColors: CustomSliderColors(
-                                          trackColor: Colors.greenAccent,
-                                          progressBarColors: [
-                                            Colors.lightGreen,
-                                            Colors.amberAccent
-                                          ],
-                                          shadowMaxOpacity: 20.0),
-                                      infoProperties: InfoProperties(
-                                          topLabelText: 'Karbohidrat',
-                                          topLabelStyle: Styles.txtLabelCircularSlider,
-                                          modifier: (double value) {
-                                            final gram = value.toDouble();
-                                            return '$gram g';
-                                          }),
-                                    ),
-                                  ),
-                                  SleekCircularSlider(
-                                    initialValue: double.parse(
-                                        detectionViewModel.protein ?? "0.0"),
-                                    min: 0,
-                                    max: 100,
-                                    appearance: CircularSliderAppearance(
-                                      size: size.width * 0.35,
-                                      customColors: CustomSliderColors(
-                                          trackColor: Colors.orangeAccent,
-                                          progressBarColors: [
-                                            Colors.lightGreen,
-                                            const Color(0xffFFBF00)
-                                          ],
-                                          shadowMaxOpacity: 20.0),
-                                      infoProperties: InfoProperties(
-                                          topLabelText: 'Protein',
-                                          topLabelStyle: Styles.txtLabelCircularSlider,
-                                          modifier: (double value) {
-                                            final gram = value.toDouble();
-                                            return '$gram g';
-                                          }),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
+                        dataCalorie(size, detectionViewModel),
                       ],
                     );
                   },
@@ -330,6 +235,174 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget dataCalorie(Size size, DetectionViewModel detectionViewModel) {
+    double protein = double.parse(detectionViewModel.protein ?? '0') / 100;
+    double karbohidrat =
+        double.parse(detectionViewModel.karbohidrat ?? '0') / 100;
+    double lemak = double.parse(detectionViewModel.lemak ?? '0') / 100;
+    return Container(
+      width: size.width,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      decoration: BoxDecoration(
+          color: kSecondryColor.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(12)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+            child: Text(
+              DateFormat('dd MMMM yyyy').format(DateTime.now()),
+              style: Styles.txtRegularWhite,
+            ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SleekCircularSlider(
+                initialValue: double.parse(detectionViewModel.kalori ?? "0.0"),
+                max: 1200,
+                appearance: CircularSliderAppearance(
+                  size: size.width * 0.45,
+                  startAngle: 270,
+                  angleRange: 360,
+                  customWidths: CustomSliderWidths(
+                      trackWidth: 10, progressBarWidth: 20, shadowWidth: 8),
+                  customColors: CustomSliderColors(
+                      shadowColor: Colors.grey.withOpacity(0.5),
+                      trackColor: kTertiaryColor,
+                      progressBarColors: [Colors.white, Colors.white],
+                      shadowMaxOpacity: 20.0),
+                  infoProperties: InfoProperties(
+                    topLabelText: 'Kalori',
+                    topLabelStyle: Styles.txtLabelCircularSlider,
+                    bottomLabelText: 'Kcal',
+                    bottomLabelStyle: Styles.txtLabelCircularSlider,
+                    mainLabelStyle: Styles.txtMainLabel,
+                    modifier: (double value) {
+                      final data = value.toInt();
+                      return '$data ';
+                    },
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: SizedBox(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: size.width * 0.35,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Karbohidrat',
+                              style: Styles.txtLabelCardWhite,
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            SizedBox(
+                              height: 10,
+                              child: LinearProgressIndicator(
+                                  value: karbohidrat,
+                                  backgroundColor: Colors.white,
+                                  valueColor:
+                                      const AlwaysStoppedAnimation<Color>(
+                                          Colors.blueAccent)),
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              '${detectionViewModel.karbohidrat ?? '0'} /100',
+                              style: Styles.txtLabelCardWhite,
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      SizedBox(
+                        // height: 10,
+                        width: size.width * 0.35,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Protein',
+                              style: Styles.txtLabelCardWhite,
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            SizedBox(
+                              height: 10,
+                              child: LinearProgressIndicator(
+                                  value: protein,
+                                  backgroundColor: Colors.white,
+                                  valueColor:
+                                      const AlwaysStoppedAnimation<Color>(
+                                          Colors.pinkAccent)),
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              '${detectionViewModel.protein ?? '0'} /100',
+                              style: Styles.txtLabelCardWhite,
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      SizedBox(
+                        width: size.width * 0.35,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Lemak',
+                              style: Styles.txtLabelCardWhite,
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            SizedBox(
+                              height: 10,
+                              child: LinearProgressIndicator(
+                                  value: lemak,
+                                  backgroundColor: Colors.white,
+                                  valueColor:
+                                      const AlwaysStoppedAnimation<Color>(
+                                          Colors.orangeAccent)),
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              '${detectionViewModel.lemak ?? '0'} /100',
+                              style: Styles.txtLabelCardWhite,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }
