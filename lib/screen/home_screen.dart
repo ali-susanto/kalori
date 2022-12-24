@@ -249,7 +249,14 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
           color: kSecondryColor.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(12)),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              offset: Offset(0, 15),
+              blurRadius: 27,
+              color: Colors.black12, // Black color with 12% opacity
+            )
+          ]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
