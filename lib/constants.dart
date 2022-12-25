@@ -31,6 +31,8 @@ class Styles {
       TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white);
   static const TextStyle txtLabelCardWhite =
       TextStyle(fontWeight: FontWeight.w600, fontSize: 12, color: Colors.white);
+  static const TextStyle txtTitleOutput = TextStyle(
+      fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 24);
 }
 
 class DataObject {
