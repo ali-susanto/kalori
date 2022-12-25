@@ -273,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               SleekCircularSlider(
                 initialValue: double.parse(detectionViewModel.kalori ?? "0.0"),
-                max: 1200,
+                max: 2300,
                 appearance: CircularSliderAppearance(
                   size: size.width * 0.45,
                   startAngle: 270,
