@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kalori/components/custom_button.dart';
 
 import '../constants.dart';
-
 
 class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({Key? key}) : super(key: key);
@@ -288,58 +288,89 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               const SizedBox(
                 height: 24,
               ),
-              SizedBox(
-                  width: size.width,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        double result = weight / pow(height / 100, 2);
-                        showModalBottomSheet(
-                          backgroundColor: const Color(0xFF2566cf),
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(16),
-                                  topRight: Radius.circular(16))),
-                          context: context,
-                          builder: (context) => SizedBox(
-                            height: size.height * 0.45,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  const Text('Index BMI Kamu',
-                                      style: TextStyle(color: Colors.white)),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  Text(
-                                    "${result.round()}",
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Berat badan kamu bisa dikatakan ideal jika angka BMI kamu berada antara angka 18,5 sampai 22,9. Bagaimana cara menjaga agar berat badan tetap ideal? kamu perlu mengonsumsi makanan dan minuman sesuai dengan kebutuhan kalori harian kamu, untuk mempertahankan berat badan ideal seperti sekarang. Misalnya, jika kebutuhan kalori harian kamu adalah 1950 kkal, maka kamu harus mengonsumsi makanan dengan total kalori 1950 per harinya.',
-                                      style: TextStyle(color: Colors.white),
-                                      textAlign: TextAlign.justify,
-                                    ),
-                                  )
-                                ],
+              CustomButton(
+                  size: size,
+                  color: Colors.blueAccent,
+                  text: 'Hitung',
+                  onPressed: () {
+                    double result = weight / pow(height / 100, 2);
+                    showModalBottomSheet(
+                      backgroundColor: const Color(0xFF2566cf),
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16),
+                              topRight: Radius.circular(16))),
+                      context: context,
+                      builder: (context) => SizedBox(
+                        height: size.height * 0.5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 8,
                               ),
-                            ),
+                              const Text('Index BMI Kamu',
+                                  style: TextStyle(color: Colors.white)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "${result.round()}",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                result < 18.5
+                                    ? "(Kurang)"
+                                    : result > 18.5 && result < 22.9
+                                        ? "(Normal)"
+                                        : result > 22.9 && result <= 24.9
+                                            ? "(Kelebihan)"
+                                            : result > 22.9 && result < 30
+                                                ? "(Obesitas 1)"
+                                                : "(Obesitas 2)",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Berat badan kamu bisa dikatakan ideal jika angka BMI kamu berada antara angka 18,5 sampai 22,9. Bagaimana cara menjaga agar berat badan tetap ideal? kamu perlu mengonsumsi makanan dan minuman sesuai dengan kebutuhan kalori harian kamu, untuk mempertahankan berat badan ideal seperti sekarang. Misalnya, jika kebutuhan kalori harian kamu adalah 1950 kkal, maka kamu harus mengonsumsi makanan dengan total kalori 1950 per harinya.',
+                                  style: TextStyle(color: Colors.white),
+                                  textAlign: TextAlign.justify,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: CustomButton(
+                                    size: size,
+                                    color: Colors.redAccent,
+                                    text: 'Oke',
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    }),
+                              )
+                            ],
                           ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(primary: kPrimaryBlue),
-                      child: const Text('Hitung')))
+                        ),
+                      ),
+                    );
+                  })
             ],
           ),
         ),
