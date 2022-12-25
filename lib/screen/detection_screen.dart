@@ -5,7 +5,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kalori/components/nutrition_data.dart';
 import 'package:kalori/view_models/detection_view_models.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
@@ -531,7 +533,7 @@ class _DetectionScreenState extends State<DetectionScreen>
                                                     image: _imageFile);
                                                 showModalBottomSheet(
                                                   backgroundColor:
-                                                      const Color(0xFF2566cf),
+                                                      kPrimaryLightColor,
                                                   shape: const RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.only(
@@ -544,6 +546,7 @@ class _DetectionScreenState extends State<DetectionScreen>
                                                   builder: (_) {
                                                     return OutputBottomSheet(
                                                         size: size,
+                                                        file: _imageFile,
                                                         viewModel: viewModel);
                                                   },
                                                 );
@@ -586,8 +589,7 @@ class _DetectionScreenState extends State<DetectionScreen>
 
                                                     showModalBottomSheet(
                                                         backgroundColor:
-                                                            const Color(
-                                                                0xFF2566cf),
+                                                            kPrimaryLightColor,
                                                         shape: const RoundedRectangleBorder(
                                                             borderRadius: BorderRadius.only(
                                                                 topLeft: Radius
@@ -600,6 +602,7 @@ class _DetectionScreenState extends State<DetectionScreen>
                                                         builder: (_) {
                                                           return OutputBottomSheet(
                                                               size: size,
+                                                              file: _imageFile,
                                                               viewModel:
                                                                   viewModel);
                                                         });
@@ -775,111 +778,88 @@ class _DetectionScreenState extends State<DetectionScreen>
 }
 
 class OutputBottomSheet extends StatelessWidget {
-  const OutputBottomSheet({
-    Key? key,
-    required this.size,
-    required this.viewModel,
-  }) : super(key: key);
+  const OutputBottomSheet(
+      {Key? key,
+      required this.size,
+      required this.viewModel,
+      required this.file})
+      : super(key: key);
 
   final Size size;
   final DetectionViewModel viewModel;
+  final File file;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: size.height * 0.5,
+      height: size.height * 0.6,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               children: [
                 const SizedBox(
-                  height: 18,
+                  height: 8,
                 ),
-                Text(
-                    viewModel.output.isEmpty
-                        ? 'Objek Tidak Terdata'
-                        : '${viewModel.output[0]}',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 24)),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SleekCircularSlider(
-                        initialValue:
-                            double.parse(viewModel.karbohidrat ?? "0.0"),
-                        appearance: CircularSliderAppearance(
-                          size: size.width * 0.25,
-                          customColors: CustomSliderColors(
-                              trackColor: Colors.greenAccent,
-                              progressBarColors: [
-                                Colors.lightGreen,
-                                Colors.amberAccent
-                              ],
-                              shadowMaxOpacity: 20.0),
-                          infoProperties: InfoProperties(
-                              topLabelText: 'Karbohidrat',
-                              topLabelStyle: Styles.txtLabelSmallCircularSlider,
-                              modifier: (double value) {
-                                final gram = value.toDouble();
-                                return '$gram g';
-                              }),
-                        ),
+                      CircleAvatar(
+                        radius: 31,
+                        child: CircleAvatar(
+                            radius: 28,
+                            child: ClipOval(
+                              child: Image.file(
+                                file,
+                              ),
+                            )),
                       ),
-                      SleekCircularSlider(
-                        initialValue: double.parse(viewModel.protein ?? "0.0"),
-                        min: 0,
-                        max: 100,
-                        appearance: CircularSliderAppearance(
-                          size: size.width * 0.25,
-                          customColors: CustomSliderColors(
-                              trackColor: Colors.orangeAccent,
-                              progressBarColors: [
-                                Colors.lightGreen,
-                                const Color(0xffFFBF00)
-                              ],
-                              shadowMaxOpacity: 20.0),
-                          infoProperties: InfoProperties(
-                              topLabelText: 'Protein',
-                              topLabelStyle: Styles.txtLabelSmallCircularSlider,
-                              modifier: (double value) {
-                                final gram = value.toDouble();
-                                return '$gram g';
-                              }),
-                        ),
+                      const SizedBox(width: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              viewModel.output.isEmpty
+                                  ? 'Objek Tidak Terdata'
+                                  : '${viewModel.output[0]}',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                  fontSize: 24)),
+                          Text("Kalori : ${viewModel.kalori} Kcal/100g",
+                              style: const TextStyle(
+                                  // fontWeight: FontWeight.w500,
+                                  // color: Colors.black87,
+                                  fontSize: 16)),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                SleekCircularSlider(
-                  initialValue: double.parse(viewModel.kalori ?? "0.0"),
-                  max: 600,
-                  appearance: CircularSliderAppearance(
-                    size: size.width * 0.25,
-                    customColors: CustomSliderColors(
-                        trackColor: Colors.greenAccent,
-                        progressBarColors: [
-                          Colors.lightGreen,
-                          Colors.amberAccent
-                        ],
-                        shadowMaxOpacity: 20.0),
-                    infoProperties: InfoProperties(
-                        mainLabelStyle: Styles.txtLabelRegularCircularSlider,
-                        topLabelText: 'Kalori',
-                        topLabelStyle: Styles.txtLabelSmallCircularSlider,
-                        modifier: (double value) {
-                          final gram = value.toDouble();
-                          return '$gram Kcal';
-                        }),
-                  ),
-                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    NutritionData(
+                        nutritionName: "Karbohidrat",
+                        nutritionValue: viewModel.karbohidrat ?? '0',
+                        valueColor: Colors.blueAccent.withOpacity(0.7),
+                        dataColor: Colors.blue),
+                    NutritionData(
+                        nutritionName: 'Protein',
+                        nutritionValue: viewModel.protein ?? '0',
+                        valueColor: Colors.pinkAccent.withOpacity(0.7),
+                        dataColor: Colors.pink),
+                    NutritionData(
+                        nutritionName: 'Lemak',
+                        nutritionValue: viewModel.lemak ?? '0',
+                        valueColor: Colors.orangeAccent.withOpacity(0.7),
+                        dataColor: Colors.orange)
+                  ],
+                )
               ],
             ),
             Column(
