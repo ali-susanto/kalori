@@ -5,15 +5,13 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kalori/components/nutrition_data.dart';
 import 'package:kalori/view_models/detection_view_models.dart';
-import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
-import '../constants.dart';
-import '../main.dart';
+import '../../constants.dart';
+import '../../main.dart';
+import 'component/output_bottom_sheet.dart';
 
 class DetectionScreen extends StatefulWidget {
   const DetectionScreen({Key? key}) : super(key: key);
@@ -48,13 +46,13 @@ class _DetectionScreenState extends State<DetectionScreen>
     var status = await Permission.camera.status;
 
     if (status.isGranted) {
-      log('Camera Permission: GRANTED');
+      log('Perizinan kamera: Diberikan');
       setState(() {
         _isCameraPermissionGranted = true;
       });
       onNewCameraSelected(cameras[0]);
     } else {
-      log('Camera Permission: DENIED');
+      log('Perizinan kamera: Ditolak');
     }
   }
 
@@ -69,7 +67,7 @@ class _DetectionScreenState extends State<DetectionScreen>
       XFile file = await cameraController.takePicture();
       return file;
     } on CameraException catch (e) {
-      debugPrint('Error when taking picture: $e');
+      debugPrint('Gagal mengambil gambar: $e');
       return null;
     }
   }
@@ -121,7 +119,7 @@ class _DetectionScreenState extends State<DetectionScreen>
 
       _currentFlashMode = controller!.value.flashMode;
     } on CameraException catch (e) {
-      debugPrint('Error initializing camera: $e');
+      debugPrint('Gagal menginisialisasi kamera: $e');
     }
 
     if (mounted) {
@@ -772,120 +770,6 @@ class _DetectionScreenState extends State<DetectionScreen>
                 ]),
           )
         ]),
-      ),
-    );
-  }
-}
-
-class OutputBottomSheet extends StatelessWidget {
-  const OutputBottomSheet(
-      {Key? key,
-      required this.size,
-      required this.viewModel,
-      required this.file})
-      : super(key: key);
-
-  final Size size;
-  final DetectionViewModel viewModel;
-  final File file;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: size.height * 0.6,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                const SizedBox(
-                  height: 8,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 31,
-                        child: CircleAvatar(
-                            radius: 28,
-                            child: ClipOval(
-                              child: Image.file(
-                                file,
-                              ),
-                            )),
-                      ),
-                      const SizedBox(width: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              viewModel.output.isEmpty
-                                  ? 'Objek Tidak Terdata'
-                                  : '${viewModel.output[0]}',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                  fontSize: 24)),
-                          Text("Kalori : ${viewModel.kalori} Kcal/100g",
-                              style: const TextStyle(
-                                  // fontWeight: FontWeight.w500,
-                                  // color: Colors.black87,
-                                  fontSize: 16)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    NutritionData(
-                        nutritionName: "Karbohidrat",
-                        nutritionValue: viewModel.karbohidrat ?? '0',
-                        valueColor: Colors.blueAccent.withOpacity(0.7),
-                        dataColor: Colors.blue),
-                    NutritionData(
-                        nutritionName: 'Protein',
-                        nutritionValue: viewModel.protein ?? '0',
-                        valueColor: Colors.pinkAccent.withOpacity(0.7),
-                        dataColor: Colors.pink),
-                    NutritionData(
-                        nutritionName: 'Lemak',
-                        nutritionValue: viewModel.lemak ?? '0',
-                        valueColor: Colors.orangeAccent.withOpacity(0.7),
-                        dataColor: Colors.orange)
-                  ],
-                )
-              ],
-            ),
-            Column(
-              children: [
-                SizedBox(
-                  width: size.width,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Tambahkan Ke Makanan Hari Ini')),
-                ),
-                SizedBox(
-                  width: size.width,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style:
-                          ElevatedButton.styleFrom(primary: Colors.redAccent),
-                      child: const Text('Kembali')),
-                )
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
