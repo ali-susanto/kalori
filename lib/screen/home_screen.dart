@@ -135,10 +135,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 25,
                 ),
                 const Text(
-                  'Tips kesehatan ',
+                  'Artikel',
                   style: TextStyle(
                       fontSize: 17,
                       color: kPrimaryBlue,
