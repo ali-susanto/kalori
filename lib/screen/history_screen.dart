@@ -1,13 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kalori/enums.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
+import '../service/auth_service.dart';
 
-class HistoryScreen extends StatelessWidget {
+class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key? key}) : super(key: key);
 
   @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      Provider.of<AuthService>(context, listen: false).getDataMakanan();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var viewModel = Provider.of<AuthService>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -21,23 +38,36 @@ class HistoryScreen extends StatelessWidget {
           )),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            Card(
-              color: const Color(0xFFF3F3F3),
-              child: ListTile(
-                leading: const CircleAvatar(
-                    backgroundColor: Color(0xFFF3F3F3),
-                    child: Text(
-                      '1',
-                      style: const TextStyle(color: Colors.black),
-                    )),
-                title: Text('Bakso'),
-                subtitle: Text(
-                    "Tanggal : ${DateFormat('dd/MM/yyyy - hh:mm aaa').format(DateTime.now())}"),
-              ),
-            )
-          ],
+        child: SingleChildScrollView(
+          child: RefreshIndicator(onRefresh: () async {
+            Provider.of<AuthService>(context, listen: false).getDataMakanan();
+          }, child: Consumer<AuthService>(builder: (context, state, child) {
+            if (state.stateType == DataState.loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Column(
+              children: [
+                ...List.generate(
+                    viewModel.makanan.length,
+                    (index) => Card(
+                          color: const Color(0xFFF3F3F3),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                                backgroundColor: Color(0xFFF3F3F3),
+                                child: Text(
+                                  '${index + 1}',
+                                  style: const TextStyle(color: Colors.black),
+                                )),
+                            title: Text(viewModel.makanan[index].nama),
+                            subtitle: Text(
+                                "Tanggal : ${viewModel.makanan[index].tanggal}"),
+                          ),
+                        ))
+              ],
+            );
+          })),
         ),
       ),
     );

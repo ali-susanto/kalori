@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kalori/enums.dart';
+import 'package:kalori/model/data_object_model.dart';
 import 'package:kalori/model/users_model.dart';
 
 class AuthService with ChangeNotifier {
+  List<DataObjectModel> makanan = [];
   bool isAuth = false;
   GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _currentUser;
@@ -25,6 +27,7 @@ class AuthService with ChangeNotifier {
   }
 
   Future<bool> autoLogin() async {
+    makanan.clear();
     changeState(DataState.loading);
     try {
       final isSignIn = await _googleSignIn.isSignedIn();
@@ -52,10 +55,16 @@ class AuthService with ChangeNotifier {
         });
 
         final currUser = await users.doc(_currentUser!.email).get();
-        print(currUser);
         final currUserData = currUser.data() as Map<String, dynamic>;
-
         user = UsersModel.fromJson(currUserData);
+
+        final listMakanan =
+            await users.doc(_currentUser!.email).collection("makanan").get();
+
+        for (var element in listMakanan.docs) {
+          var data = element.data();
+          makanan.add(DataObjectModel.fromJson(data));
+        }
 
         isAuth = isSignIn;
 
@@ -136,6 +145,26 @@ class AuthService with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future getDataMakanan() async {
+    makanan.clear();
+    try {
+      changeState(DataState.loading);
+      CollectionReference users = firestore.collection("users");
+      final listMakanan =
+          await users.doc(_currentUser!.email).collection("makanan").get();
+      for (var element in listMakanan.docs) {
+        var data = element.data();
+        makanan.add(DataObjectModel.fromJson(data));
+      }
+      print("makanan = " + makanan[0].nama);
+      changeState(DataState.succes);
+      notifyListeners();
+    } catch (e) {
+      print(e.toString());
+      changeState(DataState.error);
     }
   }
 }
