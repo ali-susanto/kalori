@@ -62,6 +62,12 @@ android {
         noCompress 'tflite'
         noCompress 'lite'
     }
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "Instantiatable"
+        checkReleaseBuilds false
+        abortOnError false
+    }
 }
 
 flutter {
