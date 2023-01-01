@@ -2,12 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 import 'package:kalori/enums.dart';
 import 'package:kalori/model/data_object_model.dart';
 import 'package:kalori/model/users_model.dart';
 
 class AuthService with ChangeNotifier {
   List<DataObjectModel> makanan = [];
+  var dataHariIni =
+      Kandungan(karbohidrat: '', protein: '', lemak: '', kalori: '');
   bool isAuth = false;
   GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _currentUser;
@@ -27,7 +30,6 @@ class AuthService with ChangeNotifier {
   }
 
   Future<bool> autoLogin() async {
-    makanan.clear();
     changeState(DataState.loading);
     try {
       final isSignIn = await _googleSignIn.isSignedIn();
@@ -151,16 +153,40 @@ class AuthService with ChangeNotifier {
 
   Future getDataMakanan() async {
     makanan.clear();
+    var tanggal = DateFormat('dd MM yyyy').format(DateTime.now());
+    double totalKalori = 0;
+    double totalKarbohidrat = 0;
+    double totalProtein = 0;
+    double totallemak = 0;
+
     try {
       changeState(DataState.loading);
       CollectionReference users = firestore.collection("users");
       final listMakanan =
           await users.doc(_currentUser!.email).collection("makanan").get();
+
       for (var element in listMakanan.docs) {
         var data = element.data();
+        print('data length: ' + DataObjectModel.fromJson(data).nama);
+
         makanan.add(DataObjectModel.fromJson(data));
       }
-      print("makanan = " + makanan[0].nama);
+
+      for (var item in makanan) {
+        if (DateFormat('dd MM yyyy').format(DateTime.parse(item.tanggal)) ==
+            tanggal) {
+          totalKalori += double.parse(item.kandungan.kalori);
+          totalKarbohidrat += double.parse(item.kandungan.karbohidrat);
+          totalProtein += double.parse(item.kandungan.protein);
+          totallemak += double.parse(item.kandungan.lemak);
+        }
+      }
+      dataHariIni = Kandungan(
+          karbohidrat: totalKarbohidrat.toStringAsFixed(1),
+          protein: totalProtein.toStringAsFixed(1),
+          lemak: totallemak.toStringAsFixed(1),
+          kalori: totalKalori.toStringAsFixed(1));
+
       changeState(DataState.succes);
       notifyListeners();
     } catch (e) {

@@ -36,11 +36,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      Provider.of<AuthService>(context, listen: false).autoLogin();
+      Provider.of<AuthService>(context, listen: false).autoLogin().then(
+          (value) =>
+              Provider.of<AuthService>(context, listen: false).autoLogin());
     });
-    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-    //   Provider.of<AuthService>(context, listen: false).getDataMakanan();
-    // });
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       Provider.of<TipsViewModel>(context, listen: false).getData();
     });
@@ -138,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(
                             height: 25,
                           ),
-                          dataCalorie(size, detectionViewModel),
+                          dataCalorie(size, viewModel),
                         ],
                       );
                     },
@@ -250,11 +249,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget dataCalorie(Size size, DetectionViewModel detectionViewModel) {
-    double protein = double.parse(detectionViewModel.protein ?? '0') / 100;
+  Widget dataCalorie(Size size, AuthService authViewModel) {
+    double protein = double.parse(authViewModel.dataHariIni.protein) / 100;
     double karbohidrat =
-        double.parse(detectionViewModel.karbohidrat ?? '0') / 100;
-    double lemak = double.parse(detectionViewModel.lemak ?? '0') / 100;
+        double.parse(authViewModel.dataHariIni.karbohidrat) / 100;
+    double lemak = double.parse(authViewModel.dataHariIni.lemak) / 100;
     return Container(
       width: size.width,
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -283,8 +282,10 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SleekCircularSlider(
-                initialValue: double.parse(detectionViewModel.kalori ?? "0.0"),
-                max: 2300,
+                initialValue: double.parse(authViewModel.dataHariIni.kalori),
+                max: double.parse(authViewModel.dataHariIni.kalori) < 2300
+                    ? 2300
+                    : 5000,
                 appearance: CircularSliderAppearance(
                   size: size.width * 0.45,
                   startAngle: 270,
@@ -339,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 2,
                             ),
                             Text(
-                              '${detectionViewModel.karbohidrat ?? '0'} /100',
+                              '${authViewModel.dataHariIni.karbohidrat} /100',
                               style: Styles.txtLabelCardWhite,
                             )
                           ],
@@ -374,7 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 2,
                             ),
                             Text(
-                              '${detectionViewModel.protein ?? '0'} /100',
+                              '${authViewModel.dataHariIni.protein} /100',
                               style: Styles.txtLabelCardWhite,
                             )
                           ],
@@ -408,7 +409,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 2,
                             ),
                             Text(
-                              '${detectionViewModel.lemak ?? '0'} /100',
+                              '${authViewModel.dataHariIni.lemak} /100',
                               style: Styles.txtLabelCardWhite,
                             )
                           ],

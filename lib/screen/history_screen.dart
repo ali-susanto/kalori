@@ -16,9 +16,9 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      Provider.of<AuthService>(context, listen: false).getDataMakanan();
-    });
+    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+    //   Provider.of<AuthService>(context, listen: false).getDataMakanan();
+    // });
     super.initState();
   }
 
