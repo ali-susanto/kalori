@@ -51,8 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var viewModel = Provider.of<AuthService>(context, listen: false);
     var tipsViewModel = Provider.of<TipsViewModel>(context, listen: false);
-    var detectionViewModel =
-        Provider.of<DetectionViewModel>(context, listen: false);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
