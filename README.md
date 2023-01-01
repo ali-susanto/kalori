@@ -35,3 +35,4 @@ Daftar makanan yang bisa di deteksi antara lain :
  - Animated Bottom Navigation Bar
  
  ### Output
+ [apk download](https://drive.google.com/file/d/1xnAYB7R1iT1JAcBE7XJlotAIBI7nV0jh/view?usp=sharing)
