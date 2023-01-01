@@ -35,3 +35,6 @@ Daftar makanan yang bisa di deteksi antara lain :
  - Animated Bottom Navigation Bar
  
  ### Output
+ - <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/home.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/history.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/detection.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/galery.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/output.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/info.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/bmi.jpg">
+
+ [apk download](https://drive.google.com/file/d/1xnAYB7R1iT1JAcBE7XJlotAIBI7nV0jh/view?usp=sharing)
