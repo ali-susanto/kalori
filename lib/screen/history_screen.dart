@@ -54,15 +54,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     (index) => Card(
                           color: const Color(0xFFF3F3F3),
                           child: ListTile(
-                            leading: CircleAvatar(
-                                backgroundColor: Color(0xFFF3F3F3),
-                                child: Text(
-                                  '${index + 1}',
-                                  style: const TextStyle(color: Colors.black),
-                                )),
-                            title: Text(viewModel.makanan[index].nama),
+                            title: Text(
+                              viewModel.makanan[index].nama,
+                              style: Styles.txtTitleCard,
+                            ),
                             subtitle: Text(
-                                "Tanggal : ${viewModel.makanan[index].tanggal}"),
+                              DateFormat("dd MMMM yyyy     hh:mm a").format(
+                                  DateTime.parse(
+                                      viewModel.makanan[index].tanggal)),
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                            trailing: Text(
+                              "${viewModel.makanan[index].kandungan.kalori} Kcal",
+                              textAlign: TextAlign.start,
+                              style: Styles.txtTitleCard,
+                            ),
                           ),
                         ))
               ],

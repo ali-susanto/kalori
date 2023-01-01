@@ -58,13 +58,14 @@ class AuthService with ChangeNotifier {
         final currUserData = currUser.data() as Map<String, dynamic>;
         user = UsersModel.fromJson(currUserData);
 
-        final listMakanan =
-            await users.doc(_currentUser!.email).collection("makanan").get();
+        // final listMakanan =
+        //     await users.doc(_currentUser!.email).collection("makanan").get();
 
-        for (var element in listMakanan.docs) {
-          var data = element.data();
-          makanan.add(DataObjectModel.fromJson(data));
-        }
+        // for (var element in listMakanan.docs) {
+        //   var data = element.data();
+        //   makanan.add(DataObjectModel.fromJson(data));
+        // }
+        await getDataMakanan();
 
         isAuth = isSignIn;
 
@@ -165,6 +166,41 @@ class AuthService with ChangeNotifier {
     } catch (e) {
       print(e.toString());
       changeState(DataState.error);
+    }
+  }
+
+  Future addDataMakanan(
+      {required String nama,
+      required String tanggal,
+      required String karbohidrat,
+      required String protein,
+      required String lemak,
+      required String kalori}) async {
+    CollectionReference users = firestore.collection("users");
+    // CollectionReference makanan = firestore.collection("makanan");
+    // final dataMakanan = await makanan.add({
+    //   "nama": nama,
+    //   "tanggal": tanggal,
+    //   "kandungan": {
+    //     "karbohidrat": karbohidrat,
+    //     "protein": protein,
+    //     "lemak": lemak,
+    //     "kalori": kalori
+    //   },
+    // });
+    try {
+      await users.doc(_currentUser!.email).collection("makanan").add({
+        "nama": nama,
+        "tanggal": tanggal,
+        "kandungan": {
+          "karbohidrat": karbohidrat,
+          "protein": protein,
+          "lemak": lemak,
+          "kalori": kalori
+        },
+      });
+    } catch (e) {
+      print(e.toString());
     }
   }
 }

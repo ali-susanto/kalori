@@ -1,8 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kalori/service/auth_service.dart';
+import 'package:provider/provider.dart';
 
 import '../../../components/custom_button.dart';
+import '../../../components/loading_toast.dart';
 import '../../../components/nutrition_data.dart';
 import '../../../constants.dart';
 import '../../../view_models/detection_view_models.dart';
@@ -21,6 +25,7 @@ class OutputBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var authViewmModel = Provider.of<AuthService>(context, listen: false);
     return SizedBox(
       height: size.height * 0.5,
       child: Padding(
@@ -92,7 +97,27 @@ class OutputBottomSheet extends StatelessWidget {
                     size: size,
                     color: Colors.blueAccent,
                     text: 'Tambahkan Ke Makanan Hari Ini',
-                    onPressed: () {}),
+                    onPressed: () async {
+                      if (viewModel.output.isNotEmpty) {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) =>
+                              const LoadingToast(message: 'Tunggu sebentar'),
+                        );
+                        await authViewmModel
+                            .addDataMakanan(
+                                nama: viewModel.output[0],
+                                tanggal: DateTime.now().toString(),
+                                karbohidrat: viewModel.karbohidrat!,
+                                protein: viewModel.protein!,
+                                lemak: viewModel.lemak!,
+                                kalori: viewModel.kalori!)
+                            .then((value) => Fluttertoast.showToast(
+                                msg: 'Berhasil di tambahkan'))
+                            .then((value) => Navigator.pop(context));
+                      }
+                    }),
                 const SizedBox(
                   height: 5,
                 ),

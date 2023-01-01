@@ -38,9 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       Provider.of<AuthService>(context, listen: false).autoLogin();
     });
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      Provider.of<AuthService>(context, listen: false).getDataMakanan();
-    });
+    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+    //   Provider.of<AuthService>(context, listen: false).getDataMakanan();
+    // });
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       Provider.of<TipsViewModel>(context, listen: false).getData();
     });
