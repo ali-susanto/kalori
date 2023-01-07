@@ -2,12 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:kalori/constants.dart';
-import 'package:kalori/model/data_object_model.dart';
 import 'package:tflite/tflite.dart';
 
 class DetectionViewModel with ChangeNotifier {
   List output = [];
-  List<DataObjectModel> dataValueObject = [];
   String? kalori;
   String? karbohidrat;
   String? protein;
@@ -25,19 +23,16 @@ class DetectionViewModel with ChangeNotifier {
     }
   }
 
-  Future clasifyImage({required File image}) async {
+  Future detectImage({required File image}) async {
     output.clear();
     kalori = '0';
     karbohidrat = '0';
     protein = '0';
     try {
       var outputFromModel = await Tflite.runModelOnImage(
-          path: image.path,
-          numResults: 2,
-          imageMean: 127.5,
-          imageStd: 127.5,
-          threshold: 0.5);
-
+        path: image.path,
+      );
+      print(outputFromModel.toString());
       var data = outputFromModel!.map((e) {
         return e["label"].replaceAll(RegExp(r'[0-9]'), '').substring(1);
       }).toList();
