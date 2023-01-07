@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kalori/view_models/detection_view_models.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -574,16 +575,12 @@ class _DetectionScreenState extends State<DetectionScreen>
                                                                 .gallery);
                                                 if (filePicked!
                                                     .path.isNotEmpty) {
-                                                  setState(() async {
-                                                    setState(() {
-                                                      _imageFile =
-                                                          File(filePicked.path);
-                                                    });
-                                                    await viewModel
-                                                        .clasifyImage(
-                                                            image: File(
-                                                                filePicked
-                                                                    .path));
+                                                  await viewModel.clasifyImage(
+                                                      image: File(
+                                                          filePicked.path));
+                                                  setState(() {
+                                                    _imageFile =
+                                                        File(filePicked.path);
 
                                                     showModalBottomSheet(
                                                         backgroundColor:
@@ -605,7 +602,15 @@ class _DetectionScreenState extends State<DetectionScreen>
                                                                   viewModel);
                                                         });
                                                   });
-                                                } else {}
+                                                } else {
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          'Gagal mendapatkan path gambar',
+                                                      backgroundColor:
+                                                          Colors.white,
+                                                      textColor:
+                                                          Colors.black87);
+                                                }
                                               },
                                               child: Container(
                                                   padding:
