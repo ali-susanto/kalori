@@ -59,15 +59,8 @@ class AuthService with ChangeNotifier {
         final currUser = await users.doc(_currentUser!.email).get();
         final currUserData = currUser.data() as Map<String, dynamic>;
         user = UsersModel.fromJson(currUserData);
-
-        // final listMakanan =
-        //     await users.doc(_currentUser!.email).collection("makanan").get();
-
-        // for (var element in listMakanan.docs) {
-        //   var data = element.data();
-        //   makanan.add(DataObjectModel.fromJson(data));
-        // }
         await getDataMakanan();
+        makanan.clear();
 
         isAuth = isSignIn;
 
@@ -90,7 +83,7 @@ class AuthService with ChangeNotifier {
       await _googleSignIn.signIn().then((value) => _currentUser = value);
 
       final isLogin = await _googleSignIn.isSignedIn();
-      print(isLogin);
+
       if (isLogin) {
         final googleAuth = await _currentUser!.authentication;
         final credential = GoogleAuthProvider.credential(
@@ -111,7 +104,6 @@ class AuthService with ChangeNotifier {
             "keyName": _currentUser!.displayName!.substring(0, 1).toUpperCase(),
             "email": _currentUser!.email,
             "photoUrl": _currentUser!.photoUrl ?? "noimage",
-            "status": "",
             "creationTime":
                 userCredential!.user!.metadata.creationTime!.toIso8601String(),
             "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
@@ -160,35 +152,40 @@ class AuthService with ChangeNotifier {
     double totallemak = 0;
 
     try {
-      changeState(DataState.loading);
+
       CollectionReference users = firestore.collection("users");
       final listMakanan =
           await users.doc(_currentUser!.email).collection("makanan").get();
+      if (listMakanan.docs.isNotEmpty) {
+        for (var element in listMakanan.docs) {
+          var data = element.data();
+          print('data length: ' + DataObjectModel.fromJson(data).nama);
+          print('data length: ' + data.toString());
 
-      for (var element in listMakanan.docs) {
-        var data = element.data();
-        print('data length: ' + DataObjectModel.fromJson(data).nama);
-
-        makanan.add(DataObjectModel.fromJson(data));
-      }
-
-      for (var item in makanan) {
-        if (DateFormat('dd MM yyyy').format(DateTime.parse(item.tanggal)) ==
-            tanggal) {
-          totalKalori += double.parse(item.kandungan.kalori);
-          totalKarbohidrat += double.parse(item.kandungan.karbohidrat);
-          totalProtein += double.parse(item.kandungan.protein);
-          totallemak += double.parse(item.kandungan.lemak);
+          makanan.add(DataObjectModel.fromJson(data));
         }
-      }
-      dataHariIni = Kandungan(
-          karbohidrat: totalKarbohidrat.toStringAsFixed(1),
-          protein: totalProtein.toStringAsFixed(1),
-          lemak: totallemak.toStringAsFixed(1),
-          kalori: totalKalori.toStringAsFixed(1));
+        print(makanan.length);
 
-      changeState(DataState.succes);
-      notifyListeners();
+        for (var item in makanan) {
+          if (DateFormat('dd MM yyyy').format(DateTime.parse(item.tanggal)) ==
+              tanggal) {
+            totalKalori += double.parse(item.kandungan.kalori);
+            totalKarbohidrat += double.parse(item.kandungan.karbohidrat);
+            totalProtein += double.parse(item.kandungan.protein);
+            totallemak += double.parse(item.kandungan.lemak);
+          } else {
+            print('object');
+          }
+        }
+        dataHariIni = Kandungan(
+            karbohidrat: totalKarbohidrat.toStringAsFixed(1),
+            protein: totalProtein.toStringAsFixed(1),
+            lemak: totallemak.toStringAsFixed(1),
+            kalori: totalKalori.toStringAsFixed(1));
+
+        changeState(DataState.succes);
+        notifyListeners();
+      }
     } catch (e) {
       print(e.toString());
       changeState(DataState.error);
@@ -203,17 +200,7 @@ class AuthService with ChangeNotifier {
       required String lemak,
       required String kalori}) async {
     CollectionReference users = firestore.collection("users");
-    // CollectionReference makanan = firestore.collection("makanan");
-    // final dataMakanan = await makanan.add({
-    //   "nama": nama,
-    //   "tanggal": tanggal,
-    //   "kandungan": {
-    //     "karbohidrat": karbohidrat,
-    //     "protein": protein,
-    //     "lemak": lemak,
-    //     "kalori": kalori
-    //   },
-    // });
+
     try {
       await users.doc(_currentUser!.email).collection("makanan").add({
         "nama": nama,

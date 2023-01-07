@@ -4,7 +4,6 @@ import 'package:kalori/components/home_screen_shimmer.dart';
 import 'package:kalori/components/small_content_shimmer.dart';
 import 'package:kalori/constants.dart';
 import 'package:kalori/enums.dart';
-import 'package:kalori/view_models/detection_view_models.dart';
 import 'package:kalori/screen/detail_tips.dart';
 import 'package:kalori/view_models/tips_view_model.dart';
 import 'package:kalori/service/auth_service.dart';
@@ -36,15 +35,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      Provider.of<AuthService>(context, listen: false).autoLogin().then(
-          (value) =>
-              Provider.of<AuthService>(context, listen: false).autoLogin());
+      Provider.of<AuthService>(context, listen: false)
+          .autoLogin()
+          .whenComplete(() => initDataMakanan());
     });
+
+    initDataMakanan();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       Provider.of<TipsViewModel>(context, listen: false).getData();
     });
-    // TODO: implement initState
     super.initState();
+  }
+
+  initDataMakanan() async {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      Provider.of<AuthService>(context, listen: false).getDataMakanan();
+      Provider.of<TipsViewModel>(context, listen: false).getData();
+    });
   }
 
   @override
@@ -54,12 +61,13 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            Provider.of<AuthService>(context, listen: false).autoLogin();
-          },
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+          child: RefreshIndicator(
+            onRefresh: () async {
+              Provider.of<AuthService>(context, listen: false).getDataMakanan();
+              Provider.of<TipsViewModel>(context, listen: false).getData();
+            },
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -293,14 +301,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   customColors: CustomSliderColors(
                       shadowColor: Colors.grey.withOpacity(0.5),
                       trackColor: kTertiaryColor,
-                      progressBarColors: [Colors.white, Colors.white],
+                      progressBarColors:
+                          double.parse(authViewModel.dataHariIni.kalori) <= 2300
+                              ? [Colors.white, Colors.white]
+                              : [Colors.red, Colors.red],
                       shadowMaxOpacity: 20.0),
                   infoProperties: InfoProperties(
                     topLabelText: 'Kalori',
                     topLabelStyle: Styles.txtLabelCircularSlider,
                     bottomLabelText: 'Kcal',
                     bottomLabelStyle: Styles.txtLabelCircularSlider,
-                    mainLabelStyle: Styles.txtMainLabel,
+                    mainLabelStyle:
+                        double.parse(authViewModel.dataHariIni.kalori) <= 2300
+                            ? Styles.txtMainLabelWhite
+                            : Styles.txtMainLabelRed,
                     modifier: (double value) {
                       final data = value.toInt();
                       return '$data ';
