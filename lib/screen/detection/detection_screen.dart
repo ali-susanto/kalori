@@ -528,7 +528,7 @@ class _DetectionScreenState extends State<DetectionScreen>
                                                     await takePicture();
                                                 _imageFile =
                                                     File(rawImage!.path);
-                                                await viewModel.clasifyImage(
+                                                await viewModel.detectImage(
                                                     image: _imageFile);
                                                 showModalBottomSheet(
                                                   backgroundColor:
@@ -575,7 +575,7 @@ class _DetectionScreenState extends State<DetectionScreen>
                                                                 .gallery);
                                                 if (filePicked!
                                                     .path.isNotEmpty) {
-                                                  await viewModel.clasifyImage(
+                                                  await viewModel.detectImage(
                                                       image: File(
                                                           filePicked.path));
                                                   setState(() {
