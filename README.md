@@ -33,6 +33,7 @@ Daftar makanan yang bisa di deteksi antara lain :
  - Image Picker
  - Shared Preferences
  - Animated Bottom Navigation Bar
+ - unit testing
  
  ### Output
  - <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/home.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/history.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/detection.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/galery.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/output.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/info.jpg"> <img width="180" alt="image" src="https://github.com/ali-susanto/kalori/blob/main/assets/output/bmi.jpg">
