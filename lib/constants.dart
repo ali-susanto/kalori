@@ -27,10 +27,14 @@ class Styles {
   static const TextStyle txtRegular = TextStyle(fontSize: 14);
   static const TextStyle txtLabelRegularCircularSlider =
       TextStyle(fontSize: 14, fontWeight: FontWeight.w600);
-  static const TextStyle txtMainLabel =
+  static const TextStyle txtMainLabelWhite =
       TextStyle(fontWeight: FontWeight.w600, fontSize: 28, color: Colors.white);
+  static const TextStyle txtMainLabelRed =
+      TextStyle(fontWeight: FontWeight.w600, fontSize: 28, color: Colors.red);
   static const TextStyle txtRegularWhite =
       TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white);
+  static const TextStyle txtRegularRed =
+      TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.red);
   static const TextStyle txtLabelCardWhite =
       TextStyle(fontWeight: FontWeight.w600, fontSize: 12, color: Colors.white);
   static const TextStyle txtTitleOutput = TextStyle(
