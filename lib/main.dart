@@ -29,7 +29,7 @@ Future<void> main() async {
   try {
     cameras = await availableCameras();
   } on CameraException catch (e) {
-    debugPrint('Gagal mendeteksi camera');
+    debugPrint('Gagal mendeteksi camera' +e.toString());
   }
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(MultiProvider(

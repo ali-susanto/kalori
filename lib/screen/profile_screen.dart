@@ -5,7 +5,7 @@ import 'package:kalori/components/profile_scren_shimmer.dart';
 import 'package:kalori/service/auth_service.dart';
 import 'package:provider/provider.dart';
 
-import '../constants.dart';
+
 import '../enums.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -22,7 +22,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Provider.of<AuthService>(context, listen: false).autoLogin();
     });
 
-    // TODO: implement initState
     super.initState();
   }
 
@@ -121,13 +120,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           readOnly: true,
                           onChanged: (value) {},
                           controller: tglLahirCtrl,
-                          validator: (value) {},
+                         
                           style: const TextStyle(
                             fontSize: 12,
                           ),
                           decoration: const InputDecoration(
-                            // suffixIcon: suffixIcon,
-                            contentPadding: const EdgeInsets.symmetric(
+                            
+                            contentPadding: EdgeInsets.symmetric(
                                 horizontal: 20.0, vertical: 10.0),
                             labelText: 'Tanggal Lahir',
                             fillColor: Colors.white,

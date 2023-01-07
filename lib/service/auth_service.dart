@@ -12,7 +12,7 @@ class AuthService with ChangeNotifier {
   var dataHariIni =
       Kandungan(karbohidrat: '', protein: '', lemak: '', kalori: '');
   bool isAuth = false;
-  GoogleSignIn _googleSignIn = GoogleSignIn();
+  final _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _currentUser;
   UserCredential? userCredential;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -111,7 +111,7 @@ class AuthService with ChangeNotifier {
             "updatedTime": DateTime.now().toIso8601String(),
           });
 
-          await users.doc(_currentUser!.email).collection("chats");
+           users.doc(_currentUser!.email).collection("chats");
         } else {
           await users.doc(_currentUser!.email).update({
             "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
@@ -128,7 +128,7 @@ class AuthService with ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -139,7 +139,7 @@ class AuthService with ChangeNotifier {
       isAuth = false;
       notifyListeners();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -159,12 +159,12 @@ class AuthService with ChangeNotifier {
       if (listMakanan.docs.isNotEmpty) {
         for (var element in listMakanan.docs) {
           var data = element.data();
-          print('data length: ' + DataObjectModel.fromJson(data).nama);
-          print('data length: ' + data.toString());
+          debugPrint('data length: ' + DataObjectModel.fromJson(data).nama);
+          debugPrint('data length: ' + data.toString());
 
           makanan.add(DataObjectModel.fromJson(data));
         }
-        print(makanan.length);
+        
 
         for (var item in makanan) {
           if (DateFormat('dd MM yyyy').format(DateTime.parse(item.tanggal)) ==
@@ -174,7 +174,7 @@ class AuthService with ChangeNotifier {
             totalProtein += double.parse(item.kandungan.protein);
             totallemak += double.parse(item.kandungan.lemak);
           } else {
-            print('object');
+            debugPrint('object');
           }
         }
         dataHariIni = Kandungan(
@@ -187,7 +187,7 @@ class AuthService with ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       changeState(DataState.error);
     }
   }
@@ -213,7 +213,7 @@ class AuthService with ChangeNotifier {
         },
       });
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

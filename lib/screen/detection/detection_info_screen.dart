@@ -43,7 +43,7 @@ class DetectionInfoScreen extends StatelessWidget {
                 child: Text(
                   '${index + 1}.   ' + DataObject().valueObject[index]['nama'],
                   textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 14),
+                  style: const TextStyle(fontSize: 14),
                 ),
               );
             }),

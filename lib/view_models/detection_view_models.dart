@@ -17,22 +17,21 @@ class DetectionViewModel with ChangeNotifier {
       await Tflite.loadModel(
           model: "assets/models/model_unquant.tflite",
           labels: "assets/models/labels.txt");
-      print('sukses');
+      debugPrint('sukses');
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
-  Future detectImage({required File image}) async {
+  Future clasifyImage({required File image}) async {
     output.clear();
     kalori = '0';
     karbohidrat = '0';
     protein = '0';
     try {
       var outputFromModel = await Tflite.runModelOnImage(
-        path: image.path,
-      );
-      print(outputFromModel.toString());
+          path: image.path, imageMean: 127.5, imageStd: 127.5, threshold: 0.5);
+
       var data = outputFromModel!.map((e) {
         return e["label"].replaceAll(RegExp(r'[0-9]'), '').substring(1);
       }).toList();
