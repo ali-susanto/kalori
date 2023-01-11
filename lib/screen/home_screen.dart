@@ -278,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+            padding: const EdgeInsets.fromLTRB(24, 0, 10, 10),
             child: Text(
               DateFormat('dd MMMM yyyy').format(DateTime.now()),
               style: Styles.txtRegularWhite,
