@@ -256,10 +256,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget dataCalorie(Size size, AuthService authViewModel) {
-    double protein = double.parse(authViewModel.dataHariIni.protein) / 100;
+    double protein =
+        double.parse(authViewModel.dataHariIni.protein ?? '0') / 100;
     double karbohidrat =
-        double.parse(authViewModel.dataHariIni.karbohidrat) / 100;
-    double lemak = double.parse(authViewModel.dataHariIni.lemak) / 100;
+        double.parse(authViewModel.dataHariIni.karbohidrat ?? '0') / 100;
+    double lemak = double.parse(authViewModel.dataHariIni.lemak ?? '0') / 100;
     return Container(
       width: size.width,
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -288,10 +289,12 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SleekCircularSlider(
-                initialValue: double.parse(authViewModel.dataHariIni.kalori),
-                max: double.parse(authViewModel.dataHariIni.kalori) < 2300
-                    ? 2300
-                    : 5000,
+                initialValue:
+                    double.parse(authViewModel.dataHariIni.kalori ?? '0'),
+                max:
+                    double.parse(authViewModel.dataHariIni.kalori ?? '0') < 2300
+                        ? 2300
+                        : 5000,
                 appearance: CircularSliderAppearance(
                   size: size.width * 0.45,
                   startAngle: 270,
@@ -301,10 +304,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   customColors: CustomSliderColors(
                       shadowColor: Colors.grey.withOpacity(0.5),
                       trackColor: kTertiaryColor,
-                      progressBarColors:
-                          double.parse(authViewModel.dataHariIni.kalori) <= 2300
-                              ? [Colors.white, Colors.white]
-                              : [Colors.red, Colors.red],
+                      progressBarColors: double.parse(
+                                  authViewModel.dataHariIni.kalori ?? '0') <=
+                              2300
+                          ? [Colors.white, Colors.white]
+                          : [Colors.red, Colors.red],
                       shadowMaxOpacity: 20.0),
                   infoProperties: InfoProperties(
                     topLabelText: 'Kalori',
@@ -312,7 +316,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     bottomLabelText: 'Kcal',
                     bottomLabelStyle: Styles.txtLabelCircularSlider,
                     mainLabelStyle:
-                        double.parse(authViewModel.dataHariIni.kalori) <= 2300
+                        double.parse(authViewModel.dataHariIni.kalori ?? '0') <=
+                                2300
                             ? Styles.txtMainLabelWhite
                             : Styles.txtMainLabelRed,
                     modifier: (double value) {

@@ -9,8 +9,8 @@ import 'package:kalori/model/users_model.dart';
 
 class AuthService with ChangeNotifier {
   List<DataObjectModel> makanan = [];
-  var dataHariIni =
-      Kandungan(karbohidrat: '', protein: '', lemak: '', kalori: '');
+  Kandungan dataHariIni =
+      Kandungan(karbohidrat: '0', protein: '0', lemak: '0', kalori: '0');
   bool isAuth = false;
   final _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _currentUser;
@@ -100,7 +100,7 @@ class AuthService with ChangeNotifier {
         if (checkuser.data() == null) {
           await users.doc(_currentUser!.email).set({
             "uid": userCredential!.user!.uid,
-            "userName":userCredential!.additionalUserInfo!.username,
+            "userName": userCredential!.additionalUserInfo!.username,
             "fullName": _currentUser!.displayName,
             "keyName": _currentUser!.displayName!.substring(0, 1).toUpperCase(),
             "email": _currentUser!.email,
@@ -112,7 +112,7 @@ class AuthService with ChangeNotifier {
             "updatedTime": DateTime.now().toIso8601String(),
           });
 
-           users.doc(_currentUser!.email).collection("chats");
+          users.doc(_currentUser!.email).collection("chats");
         } else {
           await users.doc(_currentUser!.email).update({
             "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
@@ -153,7 +153,6 @@ class AuthService with ChangeNotifier {
     double totallemak = 0;
 
     try {
-
       CollectionReference users = firestore.collection("users");
       final listMakanan =
           await users.doc(_currentUser!.email).collection("makanan").get();
@@ -165,15 +164,14 @@ class AuthService with ChangeNotifier {
 
           makanan.add(DataObjectModel.fromJson(data));
         }
-        
 
         for (var item in makanan) {
           if (DateFormat('dd MM yyyy').format(DateTime.parse(item.tanggal)) ==
               tanggal) {
-            totalKalori += double.parse(item.kandungan.kalori);
-            totalKarbohidrat += double.parse(item.kandungan.karbohidrat);
-            totalProtein += double.parse(item.kandungan.protein);
-            totallemak += double.parse(item.kandungan.lemak);
+            totalKalori += double.parse(item.kandungan.kalori ?? '0');
+            totalKarbohidrat += double.parse(item.kandungan.karbohidrat ?? '0');
+            totalProtein += double.parse(item.kandungan.protein ?? '0');
+            totallemak += double.parse(item.kandungan.lemak ?? '0');
           } else {
             debugPrint('object');
           }

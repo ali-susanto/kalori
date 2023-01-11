@@ -40,10 +40,10 @@ class Kandungan {
     required this.kalori,
   });
 
-  String karbohidrat;
-  String protein;
-  String lemak;
-  String kalori;
+  String? karbohidrat;
+  String? protein;
+  String? lemak;
+  String? kalori;
 
   factory Kandungan.fromJson(Map<String, dynamic> json) => Kandungan(
       karbohidrat: json["karbohidrat"],
