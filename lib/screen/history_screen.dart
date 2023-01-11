@@ -15,14 +15,6 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   @override
-  void initState() {
-    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-    //   Provider.of<AuthService>(context, listen: false).getDataMakanan();
-    // });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     var viewModel = Provider.of<AuthService>(context, listen: false);
     return Scaffold(
@@ -34,7 +26,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           centerTitle: true,
           title: const Text(
             'Riwayat Makan',
-            style: TextStyle(color: kPrimaryBlue, fontWeight: FontWeight.w600),
+            style: TextStyle(color: kBlackColor),
           )),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
