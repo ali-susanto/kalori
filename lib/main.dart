@@ -29,7 +29,7 @@ Future<void> main() async {
   try {
     cameras = await availableCameras();
   } on CameraException catch (e) {
-    debugPrint('Gagal mendeteksi camera' +e.toString());
+    debugPrint('Gagal mendeteksi camera' + e.toString());
   }
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(MultiProvider(
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Kalori',
+      title: 'Kalori App',
       theme: ThemeData(
         textTheme: GoogleFonts.nunitoTextTheme(
           Theme.of(context).textTheme,
