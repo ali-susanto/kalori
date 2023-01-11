@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 5,
                                     ),
                                     Text(
-                                      '${viewModel.user.name}',
+                                      '${viewModel.user.fullName}',
                                       style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,

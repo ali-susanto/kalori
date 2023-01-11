@@ -100,7 +100,8 @@ class AuthService with ChangeNotifier {
         if (checkuser.data() == null) {
           await users.doc(_currentUser!.email).set({
             "uid": userCredential!.user!.uid,
-            "name": _currentUser!.displayName,
+            "userName":userCredential!.additionalUserInfo!.username,
+            "fullName": _currentUser!.displayName,
             "keyName": _currentUser!.displayName!.substring(0, 1).toUpperCase(),
             "email": _currentUser!.email,
             "photoUrl": _currentUser!.photoUrl ?? "noimage",

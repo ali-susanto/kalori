@@ -5,7 +5,6 @@ import 'package:kalori/components/profile_scren_shimmer.dart';
 import 'package:kalori/service/auth_service.dart';
 import 'package:provider/provider.dart';
 
-
 import '../enums.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -91,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   Text(
-                    "${viewModel.user.name}",
+                    "${viewModel.user.fullName}",
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -120,12 +119,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           readOnly: true,
                           onChanged: (value) {},
                           controller: tglLahirCtrl,
-                         
                           style: const TextStyle(
                             fontSize: 12,
                           ),
                           decoration: const InputDecoration(
-                            
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 20.0, vertical: 10.0),
                             labelText: 'Tanggal Lahir',
