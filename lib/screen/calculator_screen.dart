@@ -29,7 +29,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           elevation: 0,
           centerTitle: true,
           title: const Text(
-            'BMI Calculator',
+            'Kalkulator BMI',
             style: TextStyle(color: kBlackColor),
           )),
       body: Padding(
