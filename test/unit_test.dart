@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kalori/service/tips_api.dart';
 import 'package:tflite/tflite.dart';
@@ -16,7 +17,9 @@ void main() {
             imageStd: 127.5,
             threshold: 0.5);
         expect(outputData!.first['label'], 'Bakso');
-      } catch (e) {}
+      } catch (e) {
+        debugPrint(e.toString());
+      }
     });
 
     test('Data artikel', () async {
