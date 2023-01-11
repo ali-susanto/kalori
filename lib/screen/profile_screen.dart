@@ -1,6 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kalori/components/custom_button.dart';
 import 'package:kalori/components/profile_scren_shimmer.dart';
 import 'package:kalori/service/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     var viewModel = Provider.of<AuthService>(context, listen: false);
-    var tglLahirCtrl =
-        TextEditingController(text: viewModel.user.lastSignInTime);
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -39,19 +39,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        actions: [
-          IconButton(
-            onPressed: () async => await viewModel
-                .logOut()
-                .then((value) => Fluttertoast.showToast(msg: 'User Log Out'))
-                .then((value) =>
-                    Navigator.pushReplacementNamed(context, '/login')),
-            icon: const Icon(
-              Icons.logout,
-              color: Colors.red,
-            ),
-          ),
-        ],
       ),
       body: Consumer<AuthService>(
         builder: (context, state, child) {
@@ -97,13 +84,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  Text(
-                    "${viewModel.user.email}",
-                    style: const TextStyle(
-                      fontSize: 20,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -113,52 +93,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
                       children: [
-                        TextFormField(
-                          onTap: () {},
-                          keyboardType: TextInputType.text,
-                          readOnly: true,
-                          onChanged: (value) {},
-                          controller: tglLahirCtrl,
-                          style: const TextStyle(
-                            fontSize: 12,
-                          ),
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10.0),
-                            labelText: 'Tanggal Lahir',
-                            fillColor: Colors.white,
-                            filled: true,
-                            // prefixText: prefixText,
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                                width: 2.0,
-                              ),
+                        Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24)),
+                          child: ListTile(
+                            title: const Text(
+                              'Nama Depan',
+                              style: TextStyle(fontSize: 12),
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.0),
-                              ),
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                                width: 2.0,
+                            horizontalTitleGap: 25,
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(top: 6.0),
+                              child: Text(
+                                viewModel.user.fullName!.split(' ').first,
+                                style: const TextStyle(
+                                    fontSize: 18, color: Colors.black87),
                               ),
                             ),
                           ),
                         ),
-                        ListTile(
-                          onTap: () {},
-                          leading: const Icon(Icons.person),
-                          title: const Text(
-                            "Ubah Profile",
-                            style: TextStyle(
-                              fontSize: 22,
+                        Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24)),
+                          child: ListTile(
+                            title: const Text(
+                              'Nama Belakang',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            horizontalTitleGap: 25,
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(top: 6.0),
+                              child: Text(
+                                viewModel.user.fullName!.split(' ').last,
+                                style: const TextStyle(
+                                    fontSize: 18, color: Colors.black87),
+                              ),
                             ),
                           ),
-                          trailing: const Icon(Icons.arrow_right),
                         ),
+                        Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24)),
+                          child: ListTile(
+                            title: const Text(
+                              'Email',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            horizontalTitleGap: 25,
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(top: 6.0),
+                              child: Text(
+                                viewModel.user.email ?? 'Null',
+                                style: const TextStyle(
+                                    fontSize: 18, color: Colors.black87),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        CustomButton(
+                          size: size,
+                          color: Colors.red,
+                          text: 'Sign Out',
+                          onPressed: () async => await viewModel
+                              .logOut()
+                              .then((value) =>
+                                  Fluttertoast.showToast(msg: 'User Log Out'))
+                              .then((value) => Navigator.pushReplacementNamed(
+                                  context, '/login')),
+                        )
                       ],
                     ),
                   ),
