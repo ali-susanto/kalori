@@ -93,31 +93,34 @@ class OutputBottomSheet extends StatelessWidget {
             ),
             Column(
               children: [
-                CustomButton(
-                    size: size,
-                    color: Colors.blueAccent,
-                    text: 'Tambahkan Ke Makanan Hari Ini',
-                    onPressed: () async {
-                      if (viewModel.output.isNotEmpty) {
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (context) =>
-                              const LoadingToast(message: 'Tunggu sebentar'),
-                        );
-                        await authViewmModel
-                            .addDataMakanan(
-                                nama: viewModel.output[0],
-                                tanggal: DateTime.now().toString(),
-                                karbohidrat: viewModel.karbohidrat!,
-                                protein: viewModel.protein!,
-                                lemak: viewModel.lemak!,
-                                kalori: viewModel.kalori!)
-                            .then((value) => Fluttertoast.showToast(
-                                msg: 'Berhasil di tambahkan'))
-                            .then((value) => Navigator.pop(context));
-                      }
-                    }),
+                Visibility(
+                  visible: viewModel.output.isEmpty ? false : true,
+                  child: CustomButton(
+                      size: size,
+                      color: Colors.blueAccent,
+                      text: 'Tambahkan Ke Makanan Hari Ini',
+                      onPressed: () async {
+                        if (viewModel.output.isNotEmpty) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) =>
+                                const LoadingToast(message: 'Tunggu sebentar'),
+                          );
+                          await authViewmModel
+                              .addDataMakanan(
+                                  nama: viewModel.output[0],
+                                  tanggal: DateTime.now().toString(),
+                                  karbohidrat: viewModel.karbohidrat!,
+                                  protein: viewModel.protein!,
+                                  lemak: viewModel.lemak!,
+                                  kalori: viewModel.kalori!)
+                              .then((value) => Fluttertoast.showToast(
+                                  msg: 'Berhasil di tambahkan'))
+                              .then((value) => Navigator.pop(context));
+                        }
+                      }),
+                ),
                 const SizedBox(
                   height: 5,
                 ),
