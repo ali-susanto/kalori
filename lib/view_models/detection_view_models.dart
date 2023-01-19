@@ -30,7 +30,11 @@ class DetectionViewModel with ChangeNotifier {
     protein = '0';
     try {
       var outputFromModel = await Tflite.runModelOnImage(
-          path: image.path, imageMean: 127.5, imageStd: 127.5, threshold: 0.5);
+          path: image.path,
+          numResults: 2,
+          imageMean: 127.5,
+          imageStd: 127.5,
+          threshold: 0.5);
 
       var data = outputFromModel!.map((e) {
         return e["label"].replaceAll(RegExp(r'[0-9]'), '').substring(1);
