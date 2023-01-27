@@ -11,23 +11,26 @@ class DataObjectModel {
   DataObjectModel({
     required this.nama,
     required this.tanggal,
+    required this.porsi,
     required this.kandungan,
   });
 
   String nama;
   String tanggal;
+  String porsi;
   Kandungan kandungan;
 
   factory DataObjectModel.fromJson(Map<String, dynamic> json) =>
       DataObjectModel(
         nama: json["nama"],
         tanggal: json["tanggal"],
+        porsi: json["porsi"],
         kandungan: Kandungan.fromJson(json["kandungan"]),
       );
 
   Map<String, dynamic> toJson() => {
         "nama": nama,
-        "tanggal":tanggal,
+        "tanggal": tanggal,
         "kandungan": kandungan.toJson(),
       };
 }

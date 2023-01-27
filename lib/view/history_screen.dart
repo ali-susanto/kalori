@@ -56,10 +56,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       viewModel.makanan[index].tanggal)),
                               style: const TextStyle(fontSize: 13),
                             ),
-                            trailing: Text(
-                              "${viewModel.makanan[index].kandungan.kalori} Kcal",
-                              textAlign: TextAlign.start,
-                              style: Styles.txtTitleCard,
+                            trailing: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "${viewModel.makanan[index].kandungan.kalori} Kcal",
+                                  textAlign: TextAlign.start,
+                                  style: Styles.txtTitleCard,
+                                ),
+                                Text(
+                                  viewModel.makanan[index].porsi,
+                                  style: const TextStyle(fontSize: 12),
+                                )
+                              ],
                             ),
                           ),
                         ))
