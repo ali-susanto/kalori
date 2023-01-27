@@ -32,7 +32,7 @@ class _OutputBottomSheetState extends State<OutputBottomSheet> {
   Widget build(BuildContext context) {
     var authViewmModel = Provider.of<AuthService>(context, listen: false);
     String porsiMakan = "1 Porsi (240 gr)";
-    double nilaiPorsi = 0;
+    double nilaiPorsi = 2.4;
     Size size = MediaQuery.of(context).size;
     return SizedBox(
       height: widget.size.height * 0.5,
