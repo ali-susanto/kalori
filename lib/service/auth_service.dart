@@ -194,6 +194,7 @@ class AuthService with ChangeNotifier {
   Future addDataMakanan(
       {required String nama,
       required String tanggal,
+      required String porsi,
       required String karbohidrat,
       required String protein,
       required String lemak,
@@ -204,6 +205,7 @@ class AuthService with ChangeNotifier {
       await users.doc(_currentUser!.email).collection("makanan").add({
         "nama": nama,
         "tanggal": tanggal,
+        "porsi": porsi,
         "kandungan": {
           "karbohidrat": karbohidrat,
           "protein": protein,
