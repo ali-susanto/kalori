@@ -92,6 +92,50 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479756170364:android:d8b24e7ef2da22b6bbc5f9",
+        "android_client_info": {
+          "package_name": "com.kaloriapp.kalori"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479756170364-cofdihfgtbd61q43oamvabei2mqf9f3m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kaloriapp.kalori",
+            "certificate_hash": "856298a405a3e9c971e0b3690a32e089de91b6ae"
+          }
+        },
+        {
+          "client_id": "479756170364-pupu04raotu5h0r7cu9m1q5ovu4afkcg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ4ge-TQ1VCh814xBVmFRyhMNZOzi8KBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "479756170364-pupu04raotu5h0r7cu9m1q5ovu4afkcg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "479756170364-0k3vdk57ajtrm0lnhk6krfmcuea3eb2a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kalorikuV2"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

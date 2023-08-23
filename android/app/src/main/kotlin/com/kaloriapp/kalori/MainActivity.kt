@@ -1,4 +1,4 @@
-package com.example.kalori
+package com.kaloriapp.kalori
 
 import io.flutter.embedding.android.FlutterActivity
 
